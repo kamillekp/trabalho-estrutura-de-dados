@@ -7,7 +7,7 @@
 #include "avl.h"
 
 void generateData(int n1, int *vetor);
-void formatTime(long int difference, long int timeDLL, long int timeAVL);
+void formatTime(long int difference, long int timeDLL, long int timeAVL); // FUNÇÃO PARA FORMATAR O TEMPO DE EXECUÇÃO
 
 int main(){
     setlocale(LC_ALL, "Portuguese");
@@ -31,11 +31,16 @@ int main(){
     // CRIA STRUCTS DE DLL E AVL
     DLLNode *headDLL;
     AVLNode *rootAVL;
-
-    time_t startTime = time(NULL);
+    
+    //time_t startTime = time(NULL);
     // CRIA DLL 
+    headDLL = createDLLNode(dados1[0]);
 
+    printDLL(headDLL);
     // INSERE NA DLL 
+    for(int i = 1; i < n1; i++){
+        insertDLLNode(headDLL, dados1[i]);
+    }
 
     // BUSCA MAIOR NA DLL 
 
@@ -47,10 +52,10 @@ int main(){
     // 10 MAIS REPETIDO NA DLL 
 
     // 50 MAIS REPETIDO NA DLL 
-    time_t endTime = time(NULL);
+    /*time_t endTime = time(NULL);
 
     timeDLL = abs(endTime - startTime);
-    time_t startTime = time(NULL);
+    time_t startTime = time(NULL);*/
     // CRIA AVL
     
     // INSERE NA AVL
@@ -64,22 +69,22 @@ int main(){
     // 10 MAIS REPETIDO NA AVL 
 
     // 50 MAIS REPETIDO NA AVL
-    time_t endtime = time(NULL);
-    timeAVL = abs(endtime - startTime);
+    /*time_t endtime = time(NULL);
+    timeAVL = abs(endtime - startTime);*/
 
     // VERIFICAÇÃO DE TEMPO DE EXECUÇÃO PARA CADA ESTRUTURA
-    timeDifference = abs(timeDLL - timeAVL);
+    //timeDifference = abs(timeDLL - timeAVL);
 
     // VERIFICAR DIFERENÇA DO NÚMERO DE COMPARAÇÕES DE CADA (if/while/for...)
 
     // IMPRIME OS RESULTADOS
-    formatTime(timeDifference, timeDLL, timeAVL);
+    //formatTime(timeDifference, timeDLL, timeAVL);
 
     // LIMPA AS STRUCTS
 
 
 //==========================================================================================================================================================
-
+/*
     // DADOS 2
     // CRIA STRUCTS DE DLL E AVL
     DLLNode *headDLL;
@@ -185,7 +190,7 @@ int main(){
     // LIMPA AS STRUCTS
 
 //==========================================================================================================================================================
-
+*/
     return 0;
 }
 

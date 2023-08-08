@@ -10,12 +10,12 @@ struct dllNode {
 
 // PROTÓTIPOS PARA A LISTA DUPLAMENTE ENCADEADA
 DLLNode *createDLLNode(int key);
-DLLNode *insertDLLNode(DLLNode *head, DLLNode *newNode);
+DLLNode *insertDLLNode(DLLNode *head, int key);
 DLLNode *destroyDLL(DLLNode *head);
 DLLNode *searchSmallerDLLNode(DLLNode *head);
 DLLNode *searchBiggerDLLNode(DLLNode *head);
 DLLNode *searchMediumDLLNode(DLLNode *head);
-
+void printDLL(DLLNode *head);
 
 
 

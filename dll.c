@@ -12,19 +12,29 @@ DLLNode* createDLLNode(int key){
     return newNode;
 }
 
-DLLNode* insertDLLNode(DLLNode *head, DLLNode *newNode){
-    if(head == NULL){
-        head = newNode;
-    } 
-    else {
-        DLLNode *aux = head;
+DLLNode* insertDLLNode(DLLNode* head, int key) {
+    DLLNode* newNode = (DLLNode*) malloc(sizeof(DLLNode));
+    newNode->key = key;
 
-        while(aux->right != NULL){
-            aux = aux->right;
-        }
+    DLLNode* currentNode = head;
+    DLLNode* previousNode = NULL;
 
-        aux->right = newNode;
-        newNode->left = aux;
+    while (currentNode != NULL && currentNode->key < key) {
+        previousNode = currentNode;
+        currentNode = currentNode->right;
+    }
+
+    if (currentNode == NULL) {
+        previousNode->right = newNode;
+
+        newNode->left = previousNode;
+        newNode->right = NULL;
+    } else {
+        previousNode->right = newNode; 
+        currentNode->left = newNode;
+
+        newNode->left = previousNode;
+        newNode->right = currentNode;
     }
 
     return head;
@@ -72,4 +82,13 @@ DLLNode* searchBiggerDLLNode(DLLNode *head){
     return bigger;
 }
 
+void printDLL(DLLNode *head){
+    DLLNode *aux = head;
 
+    while(aux != NULL){
+        printf("%d  ", aux->key);
+        aux = aux->right;
+    }
+
+    printf("\n");
+}

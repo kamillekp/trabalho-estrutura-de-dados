@@ -16,3 +16,5 @@ AVLNode *destroyAVL(AVLNode *root);
 AVLNode *searchSmallerAVLNode(AVLNode *root);
 AVLNode *searchBiggerAVLNode(AVLNode *root);
 AVLNode *searchMediumAVLNode(AVLNode *root);
+
+//void printAVL(AVLNode *root,int space);
