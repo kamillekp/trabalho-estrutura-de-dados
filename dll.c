@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "compare.h"
+#include "dll.h"
 
-
-// FUNÇÕES PARA DLL
 DLLNode* createDLLNode(int key){
     DLLNode *newNode = (DLLNode *) malloc(sizeof(DLLNode));
 
@@ -30,6 +28,18 @@ DLLNode* insertDLLNode(DLLNode *head, DLLNode *newNode){
     }
 
     return head;
+}
+
+DLLNode* destroyDLL(DLLNode *head){
+    DLLNode *aux = head;
+
+    while(aux != NULL){
+        DLLNode *aux2 = aux->right;
+        free(aux);
+        aux = aux2;
+    }
+
+    return NULL;
 }
 
 DLLNode* searchSmallerDLLNode(DLLNode *head){
@@ -62,15 +72,4 @@ DLLNode* searchBiggerDLLNode(DLLNode *head){
     return bigger;
 }
 
-// FUNÇÕES PARA AVL
-AVLNode* createAVLNode(int key){
-    AVLNode *newNode = (AVLNode *) malloc(sizeof(AVLNode));
-
-    newNode->key = key;
-    newNode->leftKid = NULL;
-    newNode->rightKid = NULL;
-    newNode->height = 1;
-
-    return newNode;
-}
 

@@ -3,7 +3,8 @@
 #include <time.h>
 #include <locale.h>
 
-#include "compare.h"
+#include "dll.h"
+#include "avl.h"
 
 void generateData(int n1, int *vetor);
 void formatTime(long int difference, long int timeDLL, long int timeAVL);
