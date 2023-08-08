@@ -11,7 +11,7 @@ struct avlNode {
 };
 
 typedef struct dllNode DLLNode;
-struct SLLNode {
+struct dllNode {
     int key;
     DLLNode *left;
     DLLNode *right;

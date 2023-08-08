@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 
-void geradados(int n1, int *vetor);
+void generateData(int n1, int *vetor);
 
 int main(){
 
@@ -13,11 +13,11 @@ int main(){
     int dados3 [n3];
         
     //PARA O CONJUNTO DE DADOS 1
-    geraDados(n1, dados1);
+    generateData(n1, dados1);
     //PARA O CONJUNTO DE DADOS 2
-    geraDados(n2, dados2);
+    generateData(n2, dados2);
     //PARA O CONJUNTO DE DADOS 3
-    geraDados(n3, dados3); 
+    generateData(n3, dados3); 
 
 
     // CRIA DLL 
@@ -50,12 +50,12 @@ int main(){
 
     // VERIFICAR TEMPO DE CADA USANDO TIME.H
 
-    // VERIFICAR DIFERENÇA DO NÚMERO DE COMPARAÇÕES DE CADA
+    // VERIFICAR DIFERENÇA DO NÚMERO DE COMPARAÇÕES DE CADA (if/while/for...)
 
     return 0;
 }
 
-void geraDados (int num, int *vetor){
+void generateData (int num, int *vetor){
     srand(time(NULL));
 
     //GERA 90% DOS DADOS DE FORMA PSEUDOALEATÓRIA
@@ -75,4 +75,16 @@ void geraDados (int num, int *vetor){
         vetor[indice] = numero;
         vetor[i] = aux;
     }
+}
+
+int formatTime(int tempo){
+    // FORMATA O TEMPO PARA SER EXIBIDO EM MINUTOS/SEGUNDOS (veremos)
+}
+
+void compareTime(int tempo1, int tempo2){
+    // COMPARA OS TEMPOS DA DLL E DA AVL
+}
+
+void compareComparisons(int compara1, int compara2){
+    // COMPARA O NÚMERO DE COMPARAÇÕES DA DLL E DA AVL
 }
