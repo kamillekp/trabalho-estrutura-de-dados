@@ -21,6 +21,7 @@ struct dllNode {
 // PROTÓTIPOS PARA A LISTA DUPLAMENTE ENCADEADA
 DLLNode *createDLLNode(int key);
 DLLNode *insertDLLNode(DLLNode *head, DLLNode *newNode);
+DLLNode *destroyDLLNode(DLLNode *head);
 DLLNode *searchSmallerDLLNode(DLLNode *head);
 DLLNode *searchBiggerDLLNode(DLLNode *head);
 DLLNode *searchMediumDLLNode(DLLNode *head);
@@ -29,6 +30,7 @@ DLLNode *searchMediumDLLNode(DLLNode *head);
 // PROTÓTIPOS PARA A ÁRVORE AVL
 AVLNode *createAVLNode(int key);
 AVLNode *insertAVLNode(AVLNode *root, AVLNode *newNode);
+AVLNode *destroyAVLNode(AVLNode *root);
 AVLNode *searchSmallerAVLNode(AVLNode *root);
 AVLNode *searchBiggerAVLNode(AVLNode *root);
 AVLNode *searchMediumAVLNode(AVLNode *root);

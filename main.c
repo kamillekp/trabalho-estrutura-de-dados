@@ -25,12 +25,19 @@ int main(){
     //PARA O CONJUNTO DE DADOS 3
     generateData(n3, dados3); 
 
+//==========================================================================================================================================================
+    // DADOS 1
+    // CRIA STRUCTS DE DLL E AVL
+    DLLNode *headDLL;
+    AVLNode *rootAVL;
+
     time_t startTime = time(NULL);
     // CRIA DLL 
 
     // INSERE NA DLL 
 
     // BUSCA MAIOR NA DLL 
+
 
     // BUSCA MENOR NA DLL 
 
@@ -41,6 +48,58 @@ int main(){
     // 50 MAIS REPETIDO NA DLL 
     time_t endTime = time(NULL);
 
+    timeDLL = abs(endTime - startTime);
+    time_t startTime = time(NULL);
+    // CRIA AVL
+    
+    // INSERE NA AVL
+
+    // BUSCA MAIOR NA AVL 
+
+    // BUSCA MENOR NA AVL 
+
+    // BUSCA VALOR MÉDIO NA AVL 
+
+    // 10 MAIS REPETIDO NA AVL 
+
+    // 50 MAIS REPETIDO NA AVL
+    time_t endtime = time(NULL);
+    timeAVL = abs(endtime - startTime);
+
+    // VERIFICAÇÃO DE TEMPO DE EXECUÇÃO PARA CADA ESTRUTURA
+    timeDifference = abs(timeDLL - timeAVL);
+
+    // VERIFICAR DIFERENÇA DO NÚMERO DE COMPARAÇÕES DE CADA (if/while/for...)
+
+    // IMPRIME OS RESULTADOS
+    formatTime(timeDifference, timeDLL, timeAVL);
+
+    // LIMPA AS STRUCTS
+
+
+//==========================================================================================================================================================
+
+    // DADOS 2
+    // CRIA STRUCTS DE DLL E AVL
+    DLLNode *headDLL;
+    AVLNode *rootAVL;
+
+    time_t startTime = time(NULL);
+    // CRIA DLL 
+
+    // INSERE NA DLL 
+
+    // BUSCA MAIOR NA DLL 
+
+
+    // BUSCA MENOR NA DLL 
+
+    // BUSCA VALOR MÉDIO NA DLL 
+
+    // 10 MAIS REPETIDO NA DLL 
+
+    // 50 MAIS REPETIDO NA DLL 
+    time_t endTime = time(NULL);
     timeDLL = abs(endTime - startTime);
 
     time_t startTime = time(NULL);
@@ -58,14 +117,73 @@ int main(){
 
     // 50 MAIS REPETIDO NA AVL
     time_t endtime = time(NULL);
-    
     timeAVL = abs(endtime - startTime);
 
+    // VERIFICAÇÃO DE TEMPO DE EXECUÇÃO PARA CADA ESTRUTURA
     timeDifference = abs(timeDLL - timeAVL);
-    formatTime(timeDifference, timeDLL, timeAVL);
-
 
     // VERIFICAR DIFERENÇA DO NÚMERO DE COMPARAÇÕES DE CADA (if/while/for...)
+
+    // IMPRIME OS RESULTADOS
+    formatTime(timeDifference, timeDLL, timeAVL);
+
+    // LIMPA AS STRUCTS
+
+//==========================================================================================================================================================
+
+    // DADOS 3
+    // CRIA STRUCTS DE DLL E AVL
+    DLLNode *headDLL;
+    AVLNode *rootAVL;
+
+    time_t startTime = time(NULL);
+    // CRIA DLL 
+
+    // INSERE NA DLL 
+
+    // BUSCA MAIOR NA DLL 
+
+
+    // BUSCA MENOR NA DLL 
+
+    // BUSCA VALOR MÉDIO NA DLL 
+
+    // 10 MAIS REPETIDO NA DLL 
+
+    // 50 MAIS REPETIDO NA DLL 
+    time_t endTime = time(NULL);
+    timeDLL = abs(endTime - startTime);
+
+    time_t startTime = time(NULL);
+
+    // CRIA AVL
+    
+    // INSERE NA AVL
+
+    // BUSCA MAIOR NA AVL 
+
+    // BUSCA MENOR NA AVL 
+
+    // BUSCA VALOR MÉDIO NA AVL 
+
+    // 10 MAIS REPETIDO NA AVL 
+
+    // 50 MAIS REPETIDO NA AVL
+
+    time_t endtime = time(NULL);
+    timeAVL = abs(endtime - startTime);
+
+    // VERIFICAÇÃO DE TEMPO DE EXECUÇÃO PARA CADA ESTRUTURA
+    timeDifference = abs(timeDLL - timeAVL);
+
+    // VERIFICAR DIFERENÇA DO NÚMERO DE COMPARAÇÕES DE CADA (if/while/for...)
+
+    // IMPRIME OS RESULTADOS
+    formatTime(timeDifference, timeDLL, timeAVL);
+
+    // LIMPA AS STRUCTS
+
+//==========================================================================================================================================================
 
     return 0;
 }
@@ -113,8 +231,4 @@ void formatTime(long int difference, long int timeDLL, long int timeAVL){
             printf("A DLL demorou %ld segundos a mais que a AVL.\n", difference);
         else
             printf("A AVL demorou %ld segundos a mais que a DLL.\n", difference);
-}
-
-void compareComparisons(int compara1, int compara2){
-    // COMPARA O NÚMERO DE COMPARAÇÕES DA DLL E DA AVL
 }
