@@ -17,10 +17,22 @@ struct SLLNode {
     DLLNode *right;
 };
 
-// PROTÓTIPOS PARA A ÁRVORE AVL
 
 // PROTÓTIPOS PARA A LISTA DUPLAMENTE ENCADEADA
-void insertDLL(struct DLinkedList **head, int value);
+DLLNode *createDLLNode(int key);
+DLLNode *insertDLLNode(DLLNode *head, DLLNode *newNode);
+DLLNode *searchSmallerDLLNode(DLLNode *head);
+DLLNode *searchBiggerDLLNode(DLLNode *head);
+DLLNode *searchMediumDLLNode(DLLNode *head);
+
+
+// PROTÓTIPOS PARA A ÁRVORE AVL
+AVLNode *createAVLNode(int key);
+AVLNode *insertAVLNode(AVLNode *root, AVLNode *newNode);
+AVLNode *searchSmallerAVLNode(AVLNode *root);
+AVLNode *searchBiggerAVLNode(AVLNode *root);
+AVLNode *searchMediumAVLNode(AVLNode *root);
+
 
 
 

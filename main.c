@@ -19,6 +19,39 @@ int main(){
     //PARA O CONJUNTO DE DADOS 3
     geraDados(n3, dados3); 
 
+
+    // CRIA DLL 
+
+    // INSERE NA DLL 
+
+    // BUSCA MAIOR NA DLL 
+
+    // BUSCA MENOR NA DLL 
+
+    // BUSCA VALOR MÉDIO NA DLL 
+
+    // 10 MAIS REPETIDO NA DLL 
+
+    // 50 MAIS REPETIDO NA DLL 
+
+    // CRIA AVL
+    
+    // INSERE NA AVL
+
+    // BUSCA MAIOR NA AVL 
+
+    // BUSCA MENOR NA AVL 
+
+    // BUSCA VALOR MÉDIO NA AVL 
+
+    // 10 MAIS REPETIDO NA AVL 
+
+    // 50 MAIS REPETIDO NA AVL
+
+    // VERIFICAR TEMPO DE CADA USANDO TIME.H
+
+    // VERIFICAR DIFERENÇA DO NÚMERO DE COMPARAÇÕES DE CADA
+
     return 0;
 }
 
