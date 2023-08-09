@@ -13,60 +13,70 @@ int main(){
     setlocale(LC_ALL, "Portuguese");
 
     int n1 = 5000, n2 = 10000, n3 = 100000;
-    time_t timeDifference, timeDLL, timeAVL;
-    
+
+    //time_t timeDifference, timeDLL, timeAVL;
+
+    int biggerDLL, biggerAVL, smallerDLL, smallerAVL, mediumDLL, mediumAVL;
+
+    //int tenDLL[10], tenAVL[10], fiftyDLL[50], fiftyAVL[50];
+
     int dados1 [n1];
     int dados2 [n2];
     int dados3 [n3];
-        
+
     //PARA O CONJUNTO DE DADOS 1
     generateData(n1, dados1);
     //PARA O CONJUNTO DE DADOS 2
     generateData(n2, dados2);
     //PARA O CONJUNTO DE DADOS 3
-    generateData(n3, dados3); 
+    generateData(n3, dados3);
 
 //==========================================================================================================================================================
     // DADOS 1
+
     // CRIA STRUCTS DE DLL E AVL
     DLLNode *headDLL;
     AVLNode *rootAVL;
-    
+
     //time_t startTime = time(NULL);
-    // CRIA DLL 
+
+    // CRIA DLL
     headDLL = createDLLNode(dados1[0]);
 
-    printDLL(headDLL);
-    // INSERE NA DLL 
-    for(int i = 1; i < n1; i++){
+    // INSERE NA DLL (TESTANDO PARA 10 VALORES)
+    for(int i = 1; i < 10; i++){
         insertDLLNode(headDLL, dados1[i]);
     }
 
-    // BUSCA MAIOR NA DLL 
+    printDLL(headDLL);
 
+    // BUSCA MAIOR NA DLL
+    biggerDLL = searchBiggerDLLNode(headDLL);
 
-    // BUSCA MENOR NA DLL 
+    // BUSCA MENOR NA DLL
+    smallerDLL = searchSmallerDLLNode(headDLL);
 
-    // BUSCA VALOR MÉDIO NA DLL 
+    // VALOR MÉDIO NA DLL
+    mediumDLL = searchMediumDLLNode(headDLL, 10);
 
-    // 10 MAIS REPETIDO NA DLL 
+    // 10 MAIS REPETIDO NA 
 
-    // 50 MAIS REPETIDO NA DLL 
-    /*time_t endTime = time(NULL);
+    // 50 MAIS REPETIDO NA DLL
+    //time_t endTime = time(NULL);
 
-    timeDLL = abs(endTime - startTime);
-    time_t startTime = time(NULL);*/
+    //timeDLL = abs(endTime - startTime);
+    //time_t startTime = time(NULL);
     // CRIA AVL
-    
+
     // INSERE NA AVL
 
-    // BUSCA MAIOR NA AVL 
+    // BUSCA MAIOR NA AVL
 
-    // BUSCA MENOR NA AVL 
+    // BUSCA MENOR NA AVL
 
-    // BUSCA VALOR MÉDIO NA AVL 
+    // VALOR MÉDIO NA AVL
 
-    // 10 MAIS REPETIDO NA AVL 
+    // 10 MAIS REPETIDO NA AVL
 
     // 50 MAIS REPETIDO NA AVL
     /*time_t endtime = time(NULL);
@@ -82,115 +92,6 @@ int main(){
 
     // LIMPA AS STRUCTS
 
-
-//==========================================================================================================================================================
-/*
-    // DADOS 2
-    // CRIA STRUCTS DE DLL E AVL
-    DLLNode *headDLL;
-    AVLNode *rootAVL;
-
-    time_t startTime = time(NULL);
-    // CRIA DLL 
-
-    // INSERE NA DLL 
-
-    // BUSCA MAIOR NA DLL 
-
-
-    // BUSCA MENOR NA DLL 
-
-    // BUSCA VALOR MÉDIO NA DLL 
-
-    // 10 MAIS REPETIDO NA DLL 
-
-    // 50 MAIS REPETIDO NA DLL 
-    time_t endTime = time(NULL);
-    timeDLL = abs(endTime - startTime);
-
-    time_t startTime = time(NULL);
-    // CRIA AVL
-    
-    // INSERE NA AVL
-
-    // BUSCA MAIOR NA AVL 
-
-    // BUSCA MENOR NA AVL 
-
-    // BUSCA VALOR MÉDIO NA AVL 
-
-    // 10 MAIS REPETIDO NA AVL 
-
-    // 50 MAIS REPETIDO NA AVL
-    time_t endtime = time(NULL);
-    timeAVL = abs(endtime - startTime);
-
-    // VERIFICAÇÃO DE TEMPO DE EXECUÇÃO PARA CADA ESTRUTURA
-    timeDifference = abs(timeDLL - timeAVL);
-
-    // VERIFICAR DIFERENÇA DO NÚMERO DE COMPARAÇÕES DE CADA (if/while/for...)
-
-    // IMPRIME OS RESULTADOS
-    formatTime(timeDifference, timeDLL, timeAVL);
-
-    // LIMPA AS STRUCTS
-
-//==========================================================================================================================================================
-
-    // DADOS 3
-    // CRIA STRUCTS DE DLL E AVL
-    DLLNode *headDLL;
-    AVLNode *rootAVL;
-
-    time_t startTime = time(NULL);
-    // CRIA DLL 
-
-    // INSERE NA DLL 
-
-    // BUSCA MAIOR NA DLL 
-
-
-    // BUSCA MENOR NA DLL 
-
-    // BUSCA VALOR MÉDIO NA DLL 
-
-    // 10 MAIS REPETIDO NA DLL 
-
-    // 50 MAIS REPETIDO NA DLL 
-    time_t endTime = time(NULL);
-    timeDLL = abs(endTime - startTime);
-
-    time_t startTime = time(NULL);
-
-    // CRIA AVL
-    
-    // INSERE NA AVL
-
-    // BUSCA MAIOR NA AVL 
-
-    // BUSCA MENOR NA AVL 
-
-    // BUSCA VALOR MÉDIO NA AVL 
-
-    // 10 MAIS REPETIDO NA AVL 
-
-    // 50 MAIS REPETIDO NA AVL
-
-    time_t endtime = time(NULL);
-    timeAVL = abs(endtime - startTime);
-
-    // VERIFICAÇÃO DE TEMPO DE EXECUÇÃO PARA CADA ESTRUTURA
-    timeDifference = abs(timeDLL - timeAVL);
-
-    // VERIFICAR DIFERENÇA DO NÚMERO DE COMPARAÇÕES DE CADA (if/while/for...)
-
-    // IMPRIME OS RESULTADOS
-    formatTime(timeDifference, timeDLL, timeAVL);
-
-    // LIMPA AS STRUCTS
-
-//==========================================================================================================================================================
-*/
     return 0;
 }
 

@@ -12,9 +12,12 @@ struct dllNode {
 DLLNode *createDLLNode(int key);
 DLLNode *insertDLLNode(DLLNode *head, int key);
 DLLNode *destroyDLL(DLLNode *head);
-DLLNode *searchSmallerDLLNode(DLLNode *head);
-DLLNode *searchBiggerDLLNode(DLLNode *head);
-DLLNode *searchMediumDLLNode(DLLNode *head);
+int searchSmallerDLLNode(DLLNode *head);
+int searchBiggerDLLNode(DLLNode *head);
+int mediaDLLNode(DLLNode *head, int tam);
+int searchMediumDLLNode(DLLNode *head, int tam);
+void searchTenMostRepeatedDLLNode(DLLNode *head, int *tenDLL);
+void searchFiftyMostRepeatedDLLNode(DLLNode *head, int *fiftyDLL);
 void printDLL(DLLNode *head);
 
 

@@ -2,57 +2,32 @@
 #include <stdlib.h>
 #include "dll.h"
 
-DLLNode* createDLLNode(int key){
+DLLNode* createDLLNode(int k){
     DLLNode *newNode = (DLLNode *) malloc(sizeof(DLLNode));
 
-    newNode->key = key;
+    newNode->key = k;
     newNode->left = NULL;
     newNode->right = NULL;
 
     return newNode;
 }
 
-DLLNode* insertDLLNode(DLLNode* head, int key) {
-    DLLNode* newNode = (DLLNode*) malloc(sizeof(DLLNode));
-    newNode->key = key;
+DLLNode* insertDLLNode(DLLNode* head, int k) {
+    DLLNode *newNode = createDLLNode(k);
 
-    DLLNode* currentNode = head;
-    DLLNode* previousNode = NULL;
+    DLLNode *aux = head;
 
-    while (currentNode != NULL && currentNode->key < key) {
-        previousNode = currentNode;
-        currentNode = currentNode->right;
+    while(aux->right != NULL){
+        aux = aux->right;
     }
 
-    if (currentNode == NULL) {
-        previousNode->right = newNode;
-
-        newNode->left = previousNode;
-        newNode->right = NULL;
-    } else {
-        previousNode->right = newNode; 
-        currentNode->left = newNode;
-
-        newNode->left = previousNode;
-        newNode->right = currentNode;
-    }
+    aux->right = newNode;
+    newNode->left = aux;
 
     return head;
 }
 
-DLLNode* destroyDLL(DLLNode *head){
-    DLLNode *aux = head;
-
-    while(aux != NULL){
-        DLLNode *aux2 = aux->right;
-        free(aux);
-        aux = aux2;
-    }
-
-    return NULL;
-}
-
-DLLNode* searchSmallerDLLNode(DLLNode *head){
+int searchSmallerDLLNode(DLLNode *head){
     DLLNode *aux = head;
     DLLNode *smaller = head;
 
@@ -64,10 +39,10 @@ DLLNode* searchSmallerDLLNode(DLLNode *head){
         aux = aux->right;
     }
 
-    return smaller;
+    return smaller->key;
 }
 
-DLLNode* searchBiggerDLLNode(DLLNode *head){
+int searchBiggerDLLNode(DLLNode *head){
     DLLNode *aux = head;
     DLLNode *bigger = head;
 
@@ -79,7 +54,40 @@ DLLNode* searchBiggerDLLNode(DLLNode *head){
         aux = aux->right;
     }
 
-    return bigger;
+    return bigger->key;
+}
+
+int mediaDLLNode(DLLNode *head, int tam){
+    DLLNode *aux = head;
+    int soma = 0;
+
+    while(aux != NULL){
+        soma += aux->key;
+        aux = aux->right;
+    }
+
+    return soma/tam;
+}
+
+int searchMediumDLLNode(DLLNode *head, int tam){
+    DLLNode *aux = head->right;
+    int mediumValue = mediaDLLNode(head, tam);
+    int diff2, diff1 = abs(head->key - mediumValue);
+    int medium = head->key;
+
+    while(aux != NULL){
+        diff2 = abs(aux->key - mediumValue);
+    
+        if(diff2 < diff1){
+            medium = aux->key;
+
+            diff1 = diff2;
+        }
+
+        aux = aux->right;
+    }
+
+    return medium;
 }
 
 void printDLL(DLLNode *head){

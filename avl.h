@@ -11,10 +11,4 @@ struct avlNode {
 
 // PROTÓTIPOS PARA A ÁRVORE AVL
 AVLNode *createAVLNode(int key);
-AVLNode *insertAVLNode(AVLNode *root, AVLNode *newNode);
-AVLNode *destroyAVL(AVLNode *root);
-AVLNode *searchSmallerAVLNode(AVLNode *root);
-AVLNode *searchBiggerAVLNode(AVLNode *root);
-AVLNode *searchMediumAVLNode(AVLNode *root);
-
-//void printAVL(AVLNode *root,int space);
+void printAVL(AVLNode *root, int space);
