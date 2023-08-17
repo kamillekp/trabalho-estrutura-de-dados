@@ -9,7 +9,8 @@
 //#include "avl.h"
 #include "avl.c"
 
-void insertData(DLLNode *head, int *data, int n);
+void insertDataDLL(DLLNode *head, int *data, int n);
+void insertDataAVL(AVLNode *root, int *data, int n);
 void generateData(int n1, int *vetor);
 void formatTime(long int difference, long int timeDLL, long int timeAVL); // FUNÇÃO PARA FORMATAR O TEMPO DE EXECUÇÃO
 void bubbleSort(int data[], int orderedData[], int length);
@@ -19,9 +20,10 @@ void printArr(int arr[], int n);
 int main(){
     setlocale(LC_ALL, "Portuguese");
 
-    int n[3] = {5000,10000,100000}, i;
+    int n[3] = {5000,10000,100000}, i, ok;
 
-    //time_t timeDifference, timeDLL, timeAVL;
+    clock_t startTime, endTime;
+    double timeDifference, dataGenerationTime, timeDLL[3], timeAVL[3];
 
     int biggerDLL, biggerAVL, smallerDLL, smallerAVL, mediumDLL, mediumAVL;
 
@@ -38,20 +40,24 @@ int main(){
     int* data[3] = {data1,data2,data3};
     int* orderedData[3] = {orderedData1,orderedData2,orderedData3};
 
+    startTime = clock();
     for(i=0;i<3;i++){
         generateData(n[i], data[i]);
         bubbleSort(data[i],orderedData[i],n[i]);
     }
+    endTime = clock();
+    dataGenerationTime = (double)(endTime - startTime)/CLOCKS_PER_SEC;
 
 //==========================================================================================================================================================
     // DADOS 1
 
     // CRIA STRUCTS DE DLL E AVL
     DLLNode *headDLL;
-    AVLNode *rootAVL;
+    AVLNode *rootAVL1,*rootAVL2,*rootAVL3;
+    AVLNode* rootAVL[3] = {rootAVL1,rootAVL2,rootAVL3};
 
     for(i=0;i<3;i++){
-        //time_t startTime = time(NULL);
+
         printf("\n==================================");
         printf("\nConjunto de dados %d",i+1);
         printf("\n==================================");
@@ -60,7 +66,9 @@ int main(){
         headDLL = createDLLNode(data[i][0]);
 
         // INSERE NA DLL
-        insertData(headDLL,data[i], n[i]);
+        startTime = clock();
+        insertDataDLL(headDLL,data[i], n[i]);
+        
 
         //IMPRIME DLL
         //printDLL(headDLL);
@@ -83,7 +91,7 @@ int main(){
         //IMPRIME VALOR MÉDIO
         printf("\nValor médio: %d",mediumDLL);
 
-        // 10 MAIS REPETIDO NA DLL
+        // 10 MAIS REPETIDOS NA DLL
 
         searchMostRepeatedDLLNodes(headDLL,tenDLL,tenReps,10);
         
@@ -93,10 +101,12 @@ int main(){
             printf("\n%d aparece %d vezes", tenDLL[i],tenReps[i]);
         }
 
-        // 50 MAIS REPETIDO NA DLL
+        // 50 MAIS REPETIDOS NA DLL
 
         searchMostRepeatedDLLNodes(headDLL,fiftyDLL,fiftyReps, 50);
-        
+        endTime = clock();
+        timeDLL[i] = (double)(endTime - startTime)/CLOCKS_PER_SEC;
+
         /*
         printf("\n==================================");
         printf("\n50 mais repetidos");
@@ -106,11 +116,19 @@ int main(){
 
         destroyDLL(headDLL);
 
-        //timeDLL = abs(endTime - startTime);
-        //time_t startTime = time(NULL);
+        //timeDLL = (double)(endTime - startTime)/CLOCKS_PER_SEC;
+        //time_t startTime = clock();
         // CRIA AVL
+        rootAVL[i] = NULL;
 
         // INSERE NA AVL
+
+        startTime = clock();
+        insertDataAVL(rootAVL[i],data[i],n[i]);
+        endTime = clock();
+        timeAVL[i] = (double)(endTime - startTime)/CLOCKS_PER_SEC;
+        printf("\n%d",is_avl(rootAVL[i]));
+        
 
         // BUSCA MAIOR NA AVL
 
@@ -121,13 +139,14 @@ int main(){
         // 10 MAIS REPETIDO NA AVL
 
         // 50 MAIS REPETIDO NA AVL
-        /*time_t endtime = time(NULL);
-        timeAVL = abs(endtime - startTime);*/
+        /*time_t endtime = clock();
+        timeAVL = (double)(endTime - startTime)/CLOCKS_PER_SEC;*/
 
         // VERIFICAÇÃO DE TEMPO DE EXECUÇÃO PARA CADA ESTRUTURA
         //timeDifference = abs(timeDLL - timeAVL);
 
         // VERIFICAR DIFERENÇA DO NÚMERO DE COMPARAÇÕES DE CADA (if/while/for...)
+
 
         // IMPRIME OS RESULTADOS
         //formatTime(timeDifference, timeDLL, timeAVL);
@@ -135,19 +154,41 @@ int main(){
         // LIMPA AS STRUCTS
     }
 
-    
+    printf("\nData generation");
+    printf("\nElapsed time: %f seconds\n", dataGenerationTime);
+
+    printf("\nDLL1");
+    printf("\nElapsed time: %f seconds\n", timeDLL[0]);
+    printf("\nDLL2");
+    printf("\nElapsed time: %f seconds\n", timeDLL[1]);
+    printf("\nDLL3");
+    printf("\nElapsed time: %f seconds\n", timeDLL[2]);
+
+    printf("\nAVL1");
+    printf("\nElapsed time: %f seconds\n", timeAVL[0]);
+    printf("\nAVL2");
+    printf("\nElapsed time: %f seconds\n", timeAVL[1]);
+    printf("\nAVL3");
+    printf("\nElapsed time: %f seconds\n", timeAVL[2]);    
 
     return 0;
 }
 
-void insertData(DLLNode *head, int *data, int n){
+void insertDataDLL(DLLNode *head, int *data, int n){
     for(int i = 1; i < n; i++){
         insertDLLNode(head, data[i]);
     }
 }
 
+void insertDataAVL(AVLNode *root, int *data, int n){
+    int ok;
+    for(int i = 1; i < n; i++){
+        root = insertAVLNode(root, data[i],&ok);
+    }
+}
+
 void generateData (int num, int *vetor){
-    srand(time(NULL));
+    srand(clock());
 
     //GERA 90% DOS DADOS DE FORMA PSEUDOALEATÓRIA
     for(int i = 0; i < (0.9 * num); i ++){
