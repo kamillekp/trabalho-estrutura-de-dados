@@ -16,8 +16,7 @@ int searchSmallerDLLNode(DLLNode *head);
 int searchBiggerDLLNode(DLLNode *head);
 int mediaDLLNode(DLLNode *head, int tam);
 int searchMediumDLLNode(DLLNode *head, int tam);
-void searchTenMostRepeatedDLLNode(DLLNode *head, int *tenDLL);
-void searchFiftyMostRepeatedDLLNode(DLLNode *head, int *fiftyDLL);
+void searchMostRepeatedDLLNodes(DLLNode *head, int *mostRepeated, int *repetitions, int n);
 void printDLL(DLLNode *head);
 
 

@@ -27,6 +27,19 @@ DLLNode* insertDLLNode(DLLNode* head, int k) {
     return head;
 }
 
+DLLNode *destroyDLL(DLLNode *head){
+
+    DLLNode *aux;
+
+    while (head != NULL) {
+        aux = head;
+        head = head->right;
+        free(aux);
+    }
+
+    return NULL; // Return NULL to indicate that the list is empty after destruction
+};
+
 int searchSmallerDLLNode(DLLNode *head){
     DLLNode *aux = head;
     DLLNode *smaller = head;
@@ -100,3 +113,84 @@ void printDLL(DLLNode *head){
 
     printf("\n");
 }
+
+void searchMostRepeatedDLLNodes(DLLNode *head, int *mostRepeated, int *repetitions, int n){
+    DLLNode *aux1 = head;
+    DLLNode *aux2;
+    int i,j,cont;
+    
+    for(i=0;i<n;i++){
+        mostRepeated[i] = 0;
+        repetitions[i] = 0;
+    }
+
+    //PERCORRE TODOS OS TERMOS DA DLL
+    while(aux1 != NULL){
+
+
+        //VERIFICA SE O TERMO JÁ ESTÁ ENTRE OS 10 MAIS REPETIDOS
+        for(i=0;i<n;i++){
+            if(aux1->key == mostRepeated[i]){
+                i=0;
+                //CASO JÁ ESTEJA, PASSA PRO PRÓXIMO E CHECA NOVAMENTE
+                if(aux1!=NULL){  
+                    aux1 = aux1->right;
+                }
+            }
+        }        
+
+        //CONTA AS REPETICOES
+        cont = 0;
+        aux2 = head;
+        while(aux2 != NULL){
+            if(aux2->key==aux1->key){
+                cont++;
+            }
+            aux2 = aux2->right;
+        }
+
+        //SE ESTIVER ENTRE AS 10 MAIS REPETIDAS ENCONTRA A POSIÇÃO ONDE SE ENCONTRA
+        if(cont>repetitions[n-1]){
+
+            //CASO SEJA O QUE MAIS SE REPETE INCLUI NA PRIMEIRA POSICAO
+            if(cont>=repetitions[0]){
+                for(j=n-1;j>=0;j--){
+                    mostRepeated[j+1] = mostRepeated[j];
+                    repetitions[j+1] = repetitions[j];
+                }
+                mostRepeated[0] = aux1->key;
+                repetitions[0] = cont;        
+            }
+
+            else{
+                
+                for(i=n-2;i>=0;i--){
+                    
+                    //POSICIONA O NÚMERO IMEDIATAMENTE ANTES DE UM NÚMERO COM MAIS REPETICOES QUE ELE
+                    if(repetitions[i]>cont){
+                        for(j=n-2;j>i;j--){
+                            //DESLOCA OS NUMEROS COM MENOS REPETICOES UMA CASA PARA TRAS NO RANKING
+                            mostRepeated[j+1] = mostRepeated[j];
+                            repetitions[j+1] = repetitions[j];
+                        }
+                        //POSICIONA O NUMERO
+                        mostRepeated[i+1] = aux1->key;
+                        repetitions[i+1] = cont;
+                        i=-1;
+                    }
+                }
+                
+            }
+        }
+
+
+        if(aux1!=NULL){    
+            aux1 = aux1->right;
+        }
+    }
+};
+
+
+void searchFiftyMostRepeatedDLLNode(DLLNode *head, int *fiftyDLL){
+
+};
