@@ -17,6 +17,8 @@ AVLNode* doubleRightRotation (AVLNode* pt);
 AVLNode* doubleLeftRotation (AVLNode* pt);
 AVLNode* firstCase (AVLNode* node , int *ok);
 AVLNode* secondCase (AVLNode *node , int *ok);
+int searchSmallerAVLNode(AVLNode *root);
+int searchBiggerAVLNode(AVLNode *root);
 int height (AVLNode* node);
 int is_avl(AVLNode *node);
 void printAVL(AVLNode *root, int space);

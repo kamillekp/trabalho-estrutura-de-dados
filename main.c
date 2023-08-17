@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <locale.h>
+#include <math.h>
 
 
 //#include "dll.h"
@@ -10,7 +11,7 @@
 #include "avl.c"
 
 void insertDataDLL(DLLNode *head, int *data, int n);
-void insertDataAVL(AVLNode *root, int *data, int n);
+AVLNode* insertDataAVL(AVLNode *root, int *data, int n);
 void generateData(int n1, int *vetor);
 void formatTime(long int difference, long int timeDLL, long int timeAVL); // FUNÇÃO PARA FORMATAR O TEMPO DE EXECUÇÃO
 void bubbleSort(int data[], int orderedData[], int length);
@@ -61,6 +62,9 @@ int main(){
         printf("\n==================================");
         printf("\nConjunto de dados %d",i+1);
         printf("\n==================================");
+        printf("\nDLL %d",i+1);
+        printf("\n==================================");
+
 
         // CRIA DLL
         headDLL = createDLLNode(data[i][0]);
@@ -116,6 +120,10 @@ int main(){
 
         destroyDLL(headDLL);
 
+        printf("\n==================================");
+        printf("\nAVL %d",i+1);
+        printf("\n==================================");
+
         //timeDLL = (double)(endTime - startTime)/CLOCKS_PER_SEC;
         //time_t startTime = clock();
         // CRIA AVL
@@ -124,15 +132,22 @@ int main(){
         // INSERE NA AVL
 
         startTime = clock();
-        insertDataAVL(rootAVL[i],data[i],n[i]);
+        rootAVL[i]=insertDataAVL(rootAVL[i],data[i],n[i]);
         endTime = clock();
         timeAVL[i] = (double)(endTime - startTime)/CLOCKS_PER_SEC;
-        printf("\n%d",is_avl(rootAVL[i]));
-        
+       
 
         // BUSCA MAIOR NA AVL
+        biggerAVL = searchBiggerAVLNode(rootAVL[i]);
+
+        //IMPRIME MAIOR VALOR
+        printf("\nMaior valor: %d",biggerAVL);
 
         // BUSCA MENOR NA AVL
+        smallerAVL = searchSmallerAVLNode(rootAVL[i]);
+
+        //IMPRIME MENOR VALOR
+        printf("\nMenor valor: %d",smallerAVL);
 
         // VALOR MÉDIO NA AVL
 
@@ -180,32 +195,63 @@ void insertDataDLL(DLLNode *head, int *data, int n){
     }
 }
 
-void insertDataAVL(AVLNode *root, int *data, int n){
+AVLNode* insertDataAVL(AVLNode *root, int *data, int n){
     int ok;
     for(int i = 1; i < n; i++){
         root = insertAVLNode(root, data[i],&ok);
     }
+    return root;
 }
 
 void generateData (int num, int *vetor){
     srand(clock());
 
-    //GERA 90% DOS DADOS DE FORMA PSEUDOALEATÓRIA
-    for(int i = 0; i < (0.9 * num); i ++){
-        vetor[i] = (rand() % num)+1;
+
+    if(num==100000){
+        //A FUNÇÃO RAND É LIMITADA POR UM VALOR MÁXIMO
+        //RAND_MAX = 32767
+        //DESSA FORMA, SERÃO GERADOS 4 NÚMEROS ALEATÓRIOS EM UM INTERVALO MENOR
+        int num2 = 25000;
+        //GERA 90% DOS DADOS DE FORMA PSEUDOALEATÓRIA
+        for(int i = 0; i < (0.9 * num); i ++){
+            //NÃO SEI DIREITO COMO ISSO FUNCIONOU, MAS GERA UM NÚMERO ENTRE 1 E 100000.
+            vetor[i] = 4*((rand() % num2-2)+3)-((rand() % 4)+1)+1;
+        }
+
+        //GERA 10% DOS DADOS QUE CERTAMENTE SÃO REPETIDOS
+        for(int i = (0.9 * num); i < num; i ++){
+            int j = floor((i-1)/4);
+            //PEGA UM NÚMERO JÁ EXISTENTE NO ARRAY
+            //int indice = rand()%(j)+rand()%(j)+rand()%(j)+rand()%(j);
+            //GERA UM NÚMERO DE 1 A j-1, MULTIPLICA POR 4 E SUBTRAI UM NÚMERO ENTRE 0 E 4.
+            int indice = 4*((rand() % j-2)+1)-(rand() % 4);
+            int numero = vetor[indice];
+
+            //COLOCA O NUMERO EM UM ÍNDICE QUALQUER DO ARRAY PARA QUE OS REPETIDOS NÃO FIQUEM SÓ NO FINAL
+            indice = rand()%(i - 1);
+            int aux = vetor[indice];
+            vetor[indice] = numero;
+            vetor[i] = aux;
+        }
     }
+    else{
+        //GERA 90% DOS DADOS DE FORMA PSEUDOALEATÓRIA
+        for(int i = 0; i < (0.9 * num); i ++){
+            vetor[i] = (rand() % num)+1;
+        }
 
-    //GERA 10% DOS DADOS QUE CERTAMENTE SÃO REPETIDOS
-    for(int i = (0.9 * num); i < num; i ++){
-        //PEGA UM NÚMERO JÁ EXISTENTE NO ARRAY
-        int indice = rand()%(i - 1);
-        int numero = vetor[indice];
+        //GERA 10% DOS DADOS QUE CERTAMENTE SÃO REPETIDOS
+        for(int i = (0.9 * num); i < num; i ++){
+            //PEGA UM NÚMERO JÁ EXISTENTE NO ARRAY
+            int indice = rand()%(i - 1);
+            int numero = vetor[indice];
 
-        //COLOCA O NUMERO EM UM ÍNDICE QUALQUER DO ARRAY PARA QUE OS REPETIDOS NÃO FIQUEM SÓ NO FINAL
-        indice = rand()%(i - 1);
-        int aux = vetor[indice];
-        vetor[indice] = numero;
-        vetor[i] = aux;
+            //COLOCA O NUMERO EM UM ÍNDICE QUALQUER DO ARRAY PARA QUE OS REPETIDOS NÃO FIQUEM SÓ NO FINAL
+            indice = rand()%(i - 1);
+            int aux = vetor[indice];
+            vetor[indice] = numero;
+            vetor[i] = aux;
+        }
     }
 }
 

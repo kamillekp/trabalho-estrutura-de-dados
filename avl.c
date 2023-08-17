@@ -7,6 +7,7 @@ AVLNode* insertAVLNode(AVLNode* node, int key, int *ok){
     
 if (node == NULL) 
      {
+      //printf("AAAAAAAAAAA");
      	node = (AVLNode*) malloc(sizeof(AVLNode));
         node->key = key;
         node->leftKid = NULL;
@@ -14,29 +15,30 @@ if (node == NULL)
         node->factor = 0; 
 	    *ok = 1;
      }
-     else
-     if (key < node->key) 
+     else if (key < node->key) 
      {
+      //printf("BBBBBBBBBB");
 		node->leftKid = insertAVLNode(node->leftKid,key,ok);
         if (*ok) 
         {
-   		    switch (node->factor) {
-        	  case -1:  node->factor = 0; *ok = 0; break;
-			  case  0:  node->factor = 1;  break;
-			  case  1:  node=firstCase(node,ok); break;
+   		   switch (node->factor) {
+               case -1:  node->factor = 0; *ok = 0; break;
+               case  0:  node->factor = 1;  break;
+               case  1:  node=firstCase(node,ok); break;
             }
          }
      }
-	 else
+	  else
      {
-  		    node->rightKid = insertAVLNode(node->rightKid,key,ok);
+      //printf("CCCCCCCCCCC");
+  		   node->rightKid = insertAVLNode(node->rightKid,key,ok);
             if (*ok)
             { 
-              switch (node->factor) {
-                case  1:  node->factor = 0; *ok = 0; break;
-                case  0:  node->factor = -1; break;
-			    case -1:  node = secondCase(node,ok); break;
-             }
+               switch (node->factor) {
+                  case  1:  node->factor = 0; *ok = 0; break;
+                  case  0:  node->factor = -1; break;
+                  case -1:  node = secondCase(node,ok); break;
+               }
             }
      }
      return node;
@@ -181,5 +183,45 @@ void printAVL(AVLNode *root, int space)
     printf("%d\n", root->key); 
 
     printAVL(root->leftKid, space); 
+}
+
+int searchSmallerAVLNode(AVLNode *root){
+
+    AVLNode *aux = root;
+
+    while(aux->leftKid != NULL){
+        aux = aux->leftKid;
+    }
+
+    return aux->key;
+};
+
+int searchBiggerAVLNode(AVLNode *root){
+       AVLNode *aux = root;
+
+    while(aux->rightKid != NULL){
+        aux = aux->rightKid;
+    }
+
+    return aux->key;
+};
+
+int factor(AVLNode *node)
+{
+    return (height(node->leftKid) - height(node->rightKid));
+}
+
+void draw(AVLNode *node , int level)
+{
+   int x;
+
+   if (node !=NULL){
+      for (x=1; x<=level; x++)
+      printf("=");
+      printf("%d factor= %d\n", node->key, factor(node));
+      if (node->leftKid != NULL) draw(node->leftKid, (level+1));
+      if (node->rightKid != NULL) draw(node->rightKid, (level+1));
+   }
+
 }
   
