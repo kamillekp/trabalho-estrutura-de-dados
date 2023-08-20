@@ -131,7 +131,7 @@ void searchMostRepeatedDLLNodes(DLLNode *head, int *mostRepeated, int *repetitio
         //VERIFICA SE O TERMO JÁ ESTÁ ENTRE OS 10 MAIS REPETIDOS
         for(i=0;i<n;i++){
             if(aux1->key == mostRepeated[i]){
-                i=0;
+                i=-1;
                 //CASO JÁ ESTEJA, PASSA PRO PRÓXIMO E CHECA NOVAMENTE
                 if(aux1!=NULL){  
                     aux1 = aux1->right;
@@ -188,9 +188,4 @@ void searchMostRepeatedDLLNodes(DLLNode *head, int *mostRepeated, int *repetitio
             aux1 = aux1->right;
         }
     }
-};
-
-
-void searchFiftyMostRepeatedDLLNode(DLLNode *head, int *fiftyDLL){
-
 };

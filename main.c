@@ -27,8 +27,10 @@ int main(){
     double timeDifference, dataGenerationTime, timeDLL[3], timeAVL[3];
 
     int biggerDLL, biggerAVL, smallerDLL, smallerAVL, mediumDLL, mediumAVL;
+    int biggerDLLSorted, biggerAVLSorted, smallerDLLSorted, smallerAVLSorted, mediumDLLSorted, mediumAVLSorted;
 
     int tenDLL[10], tenReps[10], tenAVL[10], fiftyDLL[50], fiftyReps[50], fiftyAVL[50];
+    int tenDLLSorted[10], tenRepsSorted[10], tenAVLSorted[10], fiftyDLLSorted[50], fiftyRepsSorted[50], fiftyAVLSorted[50];
 
 
     int data1 [n[0]];
@@ -54,10 +56,14 @@ int main(){
 
     // CRIA STRUCTS DE DLL E AVL
     DLLNode *headDLL;
+    DLLNode *headDLLSorted;
     AVLNode *rootAVL1,*rootAVL2,*rootAVL3;
+    AVLNode *rootAVL1Sorted,*rootAVL2Sorted,*rootAVL3Sorted;
     AVLNode* rootAVL[3] = {rootAVL1,rootAVL2,rootAVL3};
+    AVLNode* rootAVLSorted[3] = {rootAVL1Sorted,rootAVL2Sorted,rootAVL3Sorted};
 
     for(i=0;i<3;i++){
+
 
         printf("\n==================================");
         printf("\nConjunto de dados %d",i+1);
@@ -68,46 +74,61 @@ int main(){
 
         // CRIA DLL
         headDLL = createDLLNode(data[i][0]);
+        headDLLSorted = createDLLNode(orderedData[i][0]);
 
         // INSERE NA DLL
         startTime = clock();
         insertDataDLL(headDLL,data[i], n[i]);
-        
+        insertDataDLL(headDLLSorted,orderedData[i], n[i]);
+     
 
         //IMPRIME DLL
         //printDLL(headDLL);
 
         // BUSCA MAIOR NA DLL
         biggerDLL = searchBiggerDLLNode(headDLL);
+        biggerDLLSorted = searchBiggerDLLNode(headDLLSorted);
 
         //IMPRIME MAIOR VALOR
         printf("\nMaior valor: %d",biggerDLL);
+        printf("\nMaior valor sorted: %d",biggerDLLSorted);
 
         // BUSCA MENOR NA DLL
         smallerDLL = searchSmallerDLLNode(headDLL);
+        smallerDLLSorted = searchSmallerDLLNode(headDLLSorted);
 
         //IMPRIME MENOR VALOR
         printf("\nMenor valor: %d",smallerDLL);
+        printf("\nMenor valor sorted: %d",smallerDLLSorted);
 
         // VALOR MÉDIO NA DLL
         mediumDLL = searchMediumDLLNode(headDLL, 10);
+        mediumDLLSorted = searchMediumDLLNode(headDLLSorted, 10);
 
         //IMPRIME VALOR MÉDIO
         printf("\nValor médio: %d",mediumDLL);
+        printf("\nValor médio sorted: %d",mediumDLLSorted);
 
         // 10 MAIS REPETIDOS NA DLL
 
         searchMostRepeatedDLLNodes(headDLL,tenDLL,tenReps,10);
+        searchMostRepeatedDLLNodes(headDLLSorted,tenDLLSorted,tenRepsSorted,10);
         
         printf("\n==================================");
         printf("\n10 mais repetidos");
         for(int i=0;i<10;i++){
             printf("\n%d aparece %d vezes", tenDLL[i],tenReps[i]);
         }
+        printf("\n==================================");
+        printf("\n10 mais repetidos (sorted)");
+        for(int i=0;i<10;i++){
+            printf("\n%d aparece %d vezes", tenDLLSorted[i],tenRepsSorted[i]);
+        }
 
         // 50 MAIS REPETIDOS NA DLL
 
         searchMostRepeatedDLLNodes(headDLL,fiftyDLL,fiftyReps, 50);
+        searchMostRepeatedDLLNodes(headDLLSorted,fiftyDLLSorted,fiftyRepsSorted, 50);
         endTime = clock();
         timeDLL[i] = (double)(endTime - startTime)/CLOCKS_PER_SEC;
 
@@ -119,6 +140,7 @@ int main(){
         }*/
 
         destroyDLL(headDLL);
+        destroyDLL(headDLLSorted);
 
         printf("\n==================================");
         printf("\nAVL %d",i+1);
@@ -128,26 +150,32 @@ int main(){
         //time_t startTime = clock();
         // CRIA AVL
         rootAVL[i] = NULL;
+        rootAVLSorted[i] = NULL;
 
         // INSERE NA AVL
 
         startTime = clock();
         rootAVL[i]=insertDataAVL(rootAVL[i],data[i],n[i]);
+        rootAVLSorted[i]=insertDataAVL(rootAVLSorted[i],orderedData[i],n[i]);
         endTime = clock();
         timeAVL[i] = (double)(endTime - startTime)/CLOCKS_PER_SEC;
        
 
         // BUSCA MAIOR NA AVL
         biggerAVL = searchBiggerAVLNode(rootAVL[i]);
+        biggerAVLSorted = searchBiggerAVLNode(rootAVLSorted[i]);
 
         //IMPRIME MAIOR VALOR
         printf("\nMaior valor: %d",biggerAVL);
+        printf("\nMaior valor sorted: %d",biggerAVLSorted);
 
         // BUSCA MENOR NA AVL
         smallerAVL = searchSmallerAVLNode(rootAVL[i]);
+        smallerAVLSorted = searchSmallerAVLNode(rootAVLSorted[i]);
 
         //IMPRIME MENOR VALOR
         printf("\nMenor valor: %d",smallerAVL);
+        printf("\nMenor valor sorted: %d",smallerAVLSorted);
 
         // VALOR MÉDIO NA AVL
 
@@ -168,6 +196,10 @@ int main(){
 
         // LIMPA AS STRUCTS
     }
+
+    printf("\n==================================");
+    printf("\nTempo de execução:");
+    printf("\n==================================");
 
     printf("\nData generation");
     printf("\nElapsed time: %f seconds\n", dataGenerationTime);
