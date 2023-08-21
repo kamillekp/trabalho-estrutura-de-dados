@@ -137,7 +137,8 @@ int main(){
         printf("\n50 mais repetidos");
         for(int i=0;i<50;i++){
             printf("\n%d aparece %d vezes", fiftyDLL[i],fiftyReps[i]);
-        }*/
+        }
+        */
 
         destroyDLL(headDLL);
         destroyDLL(headDLLSorted);
@@ -170,18 +171,61 @@ int main(){
         printf("\nMaior valor sorted: %d",biggerAVLSorted);
 
         // BUSCA MENOR NA AVL
+        
         smallerAVL = searchSmallerAVLNode(rootAVL[i]);
         smallerAVLSorted = searchSmallerAVLNode(rootAVLSorted[i]);
+
 
         //IMPRIME MENOR VALOR
         printf("\nMenor valor: %d",smallerAVL);
         printf("\nMenor valor sorted: %d",smallerAVLSorted);
 
+
         // VALOR MÉDIO NA AVL
 
         // 10 MAIS REPETIDO NA AVL
 
+        for(int j=0;j<10;j++){
+            tenAVL[j] = 0;
+            tenReps[j] = 0;
+            tenAVLSorted[j] = 0;
+            tenRepsSorted[j] = 0;
+        }
+
+        searchMostRepeatedAVLNodes(rootAVL[i], tenAVL, tenReps, 10);
+        searchMostRepeatedAVLNodes(rootAVL[i], tenAVLSorted, tenRepsSorted, 10);
+
+        printf("\n==================================");
+        printf("\n10 mais repetidos");
+        for(int i=0;i<10;i++){
+            printf("\n%d aparece %d vezes", tenAVL[i],tenReps[i]);
+        }
+        printf("\n==================================");
+        printf("\n10 mais repetidos sorted");
+        for(int i=0;i<10;i++){
+            printf("\n%d aparece %d vezes", tenAVLSorted[i],tenRepsSorted[i]);
+        }
+
         // 50 MAIS REPETIDO NA AVL
+
+        for(int j=0;j<50;j++){
+            fiftyAVL[j] = 0;
+            fiftyReps[j] = 0;
+            tenAVLSorted[j] = 0;
+            tenRepsSorted[j] = 0;
+        }
+
+        searchMostRepeatedAVLNodes(rootAVL[i], fiftyAVL, fiftyReps, 50);
+        searchMostRepeatedAVLNodes(rootAVL[i], tenAVLSorted, tenRepsSorted, 50);
+
+        /*
+        printf("\n==================================");
+        printf("\n50 mais repetidos");
+        for(int i=0;i<50;i++){
+            printf("\n%d aparece %d vezes", fiftyAVL[i],fiftyReps[i]);
+        }
+        */
+
         /*time_t endtime = clock();
         timeAVL = (double)(endTime - startTime)/CLOCKS_PER_SEC;*/
 

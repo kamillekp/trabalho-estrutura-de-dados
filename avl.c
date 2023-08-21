@@ -224,4 +224,136 @@ void draw(AVLNode *node , int level)
    }
 
 }
+
+
+void searchMostRepeatedAVLNodes(AVLNode* root, int *mostRepeated, int *repetitions, int n) {
+
+   int cont,i,j;
+   int test = 0;
+
+    if (root != NULL) {
+      test = 0;
+      cont = 0;
+
+      //VERIFICA SE O TERMO JÁ ESTÁ ENTRE OS 10 MAIS REPETIDOS
+      /*
+      for(i=0;i<n;i++){
+         if(root->key == mostRepeated[i]){
+             test = 1;
+         }
+      }
+      */
+
+      //printf("%d",root->key);
+
+      //SE NÃO ESTIVER, BUSCA A QUANTIDADE DE DUPLICADAS
+      //if(!test){
+         findDuplicates(root, mostRepeated, repetitions, n, root->key, &cont);
+      //}  
+      
+      //SE ESTIVER ENTRE AS 10 MAIS REPETIDAS ENCONTRA A POSIÇÃO ONDE SE ENCONTRA
+      if(cont>repetitions[n-1]){
+
+         //CASO SEJA O QUE MAIS SE REPETE INCLUI NA PRIMEIRA POSICAO
+         if(cont>=repetitions[0]){
+               for(j=n-1;j>=0;j--){
+                  mostRepeated[j+1] = mostRepeated[j];
+                    repetitions[j+1] = repetitions[j];
+               }
+               mostRepeated[0] = root->key;
+               repetitions[0] = cont;
+         }
+
+         else{
+                
+            for(i=n-2;i>=0;i--){
+                    
+               //POSICIONA O NÚMERO IMEDIATAMENTE ANTES DE UM NÚMERO COM MAIS REPETICOES QUE ELE
+               if(repetitions[i]>cont){
+                  for(j=n-2;j>i;j--){
+                     //DESLOCA OS NUMEROS COM MENOS REPETICOES UMA CASA PARA TRAS NO RANKING
+                        mostRepeated[j+1] = mostRepeated[j];
+                        repetitions[j+1] = repetitions[j];
+                     }
+                     //POSICIONA O NUMERO
+                     mostRepeated[i+1] = root->key;
+                     repetitions[i+1] = cont;
+                     i=-1;
+                  }
+               }                
+            }
+        }
+
+      // Traverse the left subtree
+      searchMostRepeatedAVLNodes(root->leftKid, mostRepeated, repetitions, n);          
+
+      // Traverse the right subtree
+      searchMostRepeatedAVLNodes(root->rightKid, mostRepeated, repetitions, n);
+
+    }
+}
+
+void findDuplicates(AVLNode* root, int *mostRepeated, int* repetitions, int n, int key, int *cont){
+   
+   if(root!=NULL){
+      if(root->key == key){
+         *cont = *cont+1;
+      }
+
+      findDuplicates(root->leftKid, mostRepeated, repetitions, n, key, cont);
+      findDuplicates(root->rightKid, mostRepeated, repetitions, n, key, cont);
+
+   }
+}
+
+
+
+
+//CHATGPT
+
+// Function to traverse the AVL tree in-order and collect frequency data
+/*
+void traverseAndCollect(AVLNode* root, struct FrequencyData* data, int* index) {
+    if (root != NULL) {
+        traverseAndCollect(root->leftKid, data, index);
+
+        // Update the frequency data
+        data[*index].value = root->key;
+        (*index)++;
+        
+        traverseAndCollect(root->rightKid, data, index);
+    }
+}
+
+// Comparison function for qsort
+int compareFrequencyData(const void* a, const void* b) {
+    return ((struct FrequencyData*)b)->frequency - ((struct FrequencyData*)a)->frequency;
+}
+
+// Main function to find the n most repeated values
+void searchMostRepeatedAVLNodes(AVLNode* root, int *mostRepeated, int* repetitions, int n) {
+    if (root == NULL || n <= 0) {
+        return; // Handle invalid inputs
+    }
+
+    // Create an array to store frequency data
+    struct FrequencyData* frequencyData = (struct FrequencyData*)malloc(sizeof(struct FrequencyData) * n);
+    int index = 0;
+
+    // Traverse the AVL tree and collect frequency data
+    traverseAndCollect(root, frequencyData, &index);
+
+    // Sort the frequency data array
+    qsort(frequencyData, index, sizeof(struct FrequencyData), compareFrequencyData);
+
+    // Copy the top n values and their frequencies to the output arrays
+    for (int i = 0; i < n && i < index; i++) {
+        mostRepeated[i] = frequencyData[i].value;
+        repetitions[i] = frequencyData[i].frequency;
+    }
+
+    // Free the dynamically allocated memory
+    free(frequencyData);
+}*/
+
   
