@@ -306,54 +306,49 @@ void findDuplicates(AVLNode* root, int *mostRepeated, int* repetitions, int n, i
    }
 }
 
+int searchMediumAVLNode(AVLNode* root){
 
+   int bigger = 0;
+   int smaller = 0;
+   int equal = 0;
 
-
-//CHATGPT
-
-// Function to traverse the AVL tree in-order and collect frequency data
-/*
-void traverseAndCollect(AVLNode* root, struct FrequencyData* data, int* index) {
     if (root != NULL) {
-        traverseAndCollect(root->leftKid, data, index);
+      bigger = 0;
+      smaller = 0;
+      equal = 0;
+     
+      testMediumNode(root, root->key, &bigger,&smaller,&equal);
 
-        // Update the frequency data
-        data[*index].value = root->key;
-        (*index)++;
-        
-        traverseAndCollect(root->rightKid, data, index);
-    }
+      if(abs(bigger-smaller)<equal+1){
+         return root->key;
+      }
+
+      searchMediumAVLNode(root->leftKid);          
+
+      searchMediumAVLNode(root->rightKid);
+
+   }
+   return 0;
 }
 
-// Comparison function for qsort
-int compareFrequencyData(const void* a, const void* b) {
-    return ((struct FrequencyData*)b)->frequency - ((struct FrequencyData*)a)->frequency;
+void testMediumNode(AVLNode* node, int key, int* bigger, int* smaller, int* equal){
+
+   if(node!=NULL){
+      if(node->key>key){
+         bigger++;
+      }
+      else if(node->key<key){
+         smaller++;
+      }
+      else{
+         equal++;
+      }
+
+      testMediumNode(node->leftKid, key, bigger, smaller, equal);
+      testMediumNode(node->rightKid, key, bigger, smaller, equal);
+
+   }
+
+
 }
-
-// Main function to find the n most repeated values
-void searchMostRepeatedAVLNodes(AVLNode* root, int *mostRepeated, int* repetitions, int n) {
-    if (root == NULL || n <= 0) {
-        return; // Handle invalid inputs
-    }
-
-    // Create an array to store frequency data
-    struct FrequencyData* frequencyData = (struct FrequencyData*)malloc(sizeof(struct FrequencyData) * n);
-    int index = 0;
-
-    // Traverse the AVL tree and collect frequency data
-    traverseAndCollect(root, frequencyData, &index);
-
-    // Sort the frequency data array
-    qsort(frequencyData, index, sizeof(struct FrequencyData), compareFrequencyData);
-
-    // Copy the top n values and their frequencies to the output arrays
-    for (int i = 0; i < n && i < index; i++) {
-        mostRepeated[i] = frequencyData[i].value;
-        repetitions[i] = frequencyData[i].frequency;
-    }
-
-    // Free the dynamically allocated memory
-    free(frequencyData);
-}*/
-
   

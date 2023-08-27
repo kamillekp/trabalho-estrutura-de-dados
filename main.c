@@ -169,18 +169,21 @@ int main(){
         printf("\nMaior valor: %d",biggerAVL);
         printf("\nMaior valor sorted: %d",biggerAVLSorted);
 
-        // BUSCA MENOR NA AVL
-        
+        // BUSCA MENOR NA AVL        
         smallerAVL = searchSmallerAVLNode(rootAVL[i]);
         smallerAVLSorted = searchSmallerAVLNode(rootAVLSorted[i]);
-
 
         //IMPRIME MENOR VALOR
         printf("\nMenor valor: %d",smallerAVL);
         printf("\nMenor valor sorted: %d",smallerAVLSorted);
 
-
         // VALOR MÉDIO NA AVL
+        mediumAVL = searchMediumAVLNode(rootAVL[i]);
+        mediumAVLSorted = searchMediumAVLNode(rootAVLSorted[i]);
+
+        //IMPRIME VALOR MÉDIO
+        printf("\nValor médio: %d",mediumDLL);
+        printf("\nValor médio sorted: %d",mediumDLLSorted);
 
         // 10 MAIS REPETIDO NA AVL
 

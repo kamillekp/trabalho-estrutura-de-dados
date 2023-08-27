@@ -32,3 +32,5 @@ void searchMostRepeatedAVLNodes(AVLNode *root, int *mostRepeated, int *repetitio
 //void traverseAndCollect(AVLNode *root, struct FrequencyData *data, int *index);
 void findDuplicates(AVLNode* root, int *mostRepeated, int* repetitions, int n, int key, int *cont);
 void listAllTerms(AVLNode* root);
+int searchMediumAVLNode(AVLNode* root);
+void testMediumNode(AVLNode* node, int key, int* bigger, int* smaller, int* equal);
