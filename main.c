@@ -44,7 +44,7 @@ int main(){
     int* orderedData[3] = {orderedData1,orderedData2,orderedData3};
 
     startTime = clock();
-    for(i=0;i<3;i++){
+    for(i=0;i<1;i++){
         generateData(n[i], data[i]);
         bubbleSort(data[i],orderedData[i],n[i]);
     }
@@ -62,8 +62,7 @@ int main(){
     AVLNode* rootAVL[3] = {rootAVL1,rootAVL2,rootAVL3};
     AVLNode* rootAVLSorted[3] = {rootAVL1Sorted,rootAVL2Sorted,rootAVL3Sorted};
 
-    for(i=0;i<3;i++){
-
+    for(i=0;i<1;i++){
 
         printf("\n==================================");
         printf("\nConjunto de dados %d",i+1);
@@ -102,8 +101,8 @@ int main(){
         printf("\nMenor valor sorted: %d",smallerDLLSorted);
 
         // VALOR MÉDIO NA DLL
-        mediumDLL = searchMediumDLLNode(headDLL, 10);
-        mediumDLLSorted = searchMediumDLLNode(headDLLSorted, 10);
+        mediumDLL = searchMediumDLLNode(headDLL, n[i]);
+        mediumDLLSorted = searchMediumDLLNode(headDLLSorted, n[i]);
 
         //IMPRIME VALOR MÉDIO
         printf("\nValor médio: %d",mediumDLL);

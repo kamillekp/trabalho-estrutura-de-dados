@@ -83,24 +83,35 @@ int mediaDLLNode(DLLNode *head, int tam){
 }
 
 int searchMediumDLLNode(DLLNode *head, int tam){
-    DLLNode *aux = head->right;
-    int mediumValue = mediaDLLNode(head, tam);
-    int diff2, diff1 = abs(head->key - mediumValue);
-    int medium = head->key;
+    DLLNode *aux1 = head;
+    DLLNode *aux2 = head;
+    int bigger, smaller, equal;
 
-    while(aux != NULL){
-        diff2 = abs(aux->key - mediumValue);
-    
-        if(diff2 < diff1){
-            medium = aux->key;
-
-            diff1 = diff2;
+    while(aux1 != NULL){
+        bigger = 0;
+        smaller = 0;
+        equal = 0;
+        while (aux2 != NULL){
+            if(aux2->key>aux1->key){
+                bigger++;
+            }
+            else if(aux2->key<aux1->key){
+                smaller++;
+            }
+            else{
+                equal++;
+            }
+            aux2 = aux2->right;
         }
 
-        aux = aux->right;
+        //SE O NÚMERO TIVER EXATAMENTE NO MEIO DO CONJUNTO DE DADOS RETORNA O VALOR DELE 
+        //(HÁ DUAS POSSIBILIDADES PARA CONJUNTO COM QUANTIDADE PAR DE DADOS)
+        if(abs(bigger-smaller)<equal+1){
+            return aux1->key;
+        }
+        aux1 = aux1->right;
+        aux2 = head;
     }
-
-    return medium;
 }
 
 void printDLL(DLLNode *head){
