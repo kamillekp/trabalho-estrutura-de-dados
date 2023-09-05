@@ -9,28 +9,21 @@ struct avlNode {
     AVLNode *rightKid;
 };
 
-struct FrequencyData {
-    int value;
-    int frequency;
-};
-
 // PROTÓTIPOS PARA A ÁRVORE AVL
-AVLNode *insertAVLNode(AVLNode* node, int key, int *ok);
+AVLNode* insertAVLNode(AVLNode* node, int key, int *ok,int *cont);
 AVLNode* rightRotation(AVLNode *pt);
 AVLNode* leftRotation(AVLNode *pt);
-AVLNode* doubleRightRotation (AVLNode* pt);
-AVLNode* doubleLeftRotation (AVLNode* pt);
-AVLNode* firstCase (AVLNode* node , int *ok);
-AVLNode* secondCase (AVLNode *node , int *ok);
-int searchSmallerAVLNode(AVLNode *root);
-int searchBiggerAVLNode(AVLNode *root);
+AVLNode* doubleRightRotation (AVLNode* pt,int *cont);
+AVLNode* doubleLeftRotation (AVLNode* pt,int *cont);
+AVLNode* firstCase (AVLNode* node , int *ok,int *cont);
+AVLNode* secondCase (AVLNode *node , int *ok,int *cont);
+int searchSmallerAVLNode(AVLNode *root, int *cont);
+int searchBiggerAVLNode(AVLNode *root, int *cont);
 int height (AVLNode* node);
 int is_avl(AVLNode *node);
 void printAVL(AVLNode *root, int space);
-//int compareFrequencyData(const void* a, const void* b);
-void searchMostRepeatedAVLNodes(AVLNode *root, int *mostRepeated, int *repetitions, int n);
-//void traverseAndCollect(AVLNode *root, struct FrequencyData *data, int *index);
-void findDuplicates(AVLNode* root, int *mostRepeated, int* repetitions, int n, int key, int *cont);
+void searchMostRepeatedAVLNodes(AVLNode *root, int *mostRepeated, int *repetitions, int n, int *contC);
+void findDuplicates(AVLNode* root, int *mostRepeated, int* repetitions, int n, int key, int *cont, int *contC);
 void listAllTerms(AVLNode* root);
-int searchMediumAVLNode(AVLNode* root);
-void testMediumNode(AVLNode* node, int key, int* bigger, int* smaller, int* equal);
+int searchMediumAVLNode(AVLNode* root, int *cont);
+void testMediumNode(AVLNode* node, int key, int* bigger, int* smaller, int* equal, int *cont);

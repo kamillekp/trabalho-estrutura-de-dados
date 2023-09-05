@@ -3,17 +3,14 @@
 #include <time.h>
 #include <locale.h>
 #include <math.h>
-
-
-//#include "dll.h"
+#include <windows.h>
 #include "dll.c"
-//#include "avl.h"
 #include "avl.c"
+#define NUM 3
 
-void insertDataDLL(DLLNode *head, int *data, int n);
-AVLNode* insertDataAVL(AVLNode *root, int *data, int n);
+void insertDataDLL(DLLNode *head, int *data, int n, int *cont);
+AVLNode* insertDataAVL(AVLNode *root, int *data, int n, int *cont);
 void generateData(int n1, int *vetor);
-void formatTime(long int difference, long int timeDLL, long int timeAVL); // FUNÇÃO PARA FORMATAR O TEMPO DE EXECUÇÃO
 void bubbleSort(int data[], int orderedData[], int length);
 void zeros(int arr[], int n);
 void printArr(int arr[], int n);
@@ -21,7 +18,37 @@ void printArr(int arr[], int n);
 int main(){
     setlocale(LC_ALL, "Portuguese");
 
-    int n[3] = {5000,10000,100000}, i, ok;
+    int n[3] = {5000,10000,100000}, i, ok, aux;
+    int cont;
+
+    LARGE_INTEGER start_time, end_time, frequency;
+
+    //TESTE 1
+    long long timeInsertDLL[3], timeInsertDLLSorted[3], timeInsertAVL[3], timeInsertAVLSorted[3];
+    double timeInsertDLLDecimal[3], timeInsertDLLSortedDecimal[3], timeInsertAVLDecimal[3], timeInsertAVLSortedDecimal[3];
+    int contInsertDLL[3], contInsertDLLSorted[3], contInsertAVL[3], contInsertAVLSorted[3];
+
+    //TESTE 2
+    long long timeBiggerSmallerDLL[3], timeBiggerSmallerDLLSorted[3], timeBiggerSmallerAVL[3], timeBiggerSmallerAVLSorted[3];
+    double timeBiggerSmallerDLLDecimal[3], timeBiggerSmallerDLLSortedDecimal[3], timeBiggerSmallerAVLDecimal[3], timeBiggerSmallerAVLSortedDecimal[3];
+    int contBiggerSmallerDLL[3], contBiggerSmallerDLLSorted[3], contBiggerSmallerAVL[3], contBiggerSmallerAVLSorted[3];
+
+    //TESTE 3
+    long long timeMediumValueDLL[3], timeMediumValueDLLSorted[3], timeMediumValueAVL[3], timeMediumValueAVLSorted[3];
+    double timeMediumValueDLLDecimal[3], timeMediumValueDLLSortedDecimal[3], timeMediumValueAVLDecimal[3], timeMediumValueAVLSortedDecimal[3];
+    int contMediumValueDLL[3], contMediumValueDLLSorted[3], contMediumValueAVL[3], contMediumValueAVLSorted[3];
+
+    //TESTE 4
+    long long timeTenMostRepeatedDLL[3], timeTenMostRepeatedDLLSorted[3], timeTenMostRepeatedAVL[3], timeTenMostRepeatedAVLSorted[3];
+    double timeTenMostRepeatedDLLDecimal[3], timeTenMostRepeatedDLLSortedDecimal[3], timeTenMostRepeatedAVLDecimal[3], timeTenMostRepeatedAVLSortedDecimal[3];
+    int contTenMostRepeatedAVL[3], contTenMostRepeatedAVLSorted[3];
+    unsigned long long contTenMostRepeatedDLL[3], contTenMostRepeatedDLLSorted[3];
+
+    //TESTE 5
+    long long timeFiftyMostRepeatedDLL[3], timeFiftyMostRepeatedDLLSorted[3], timeFiftyMostRepeatedAVL[3], timeFiftyMostRepeatedAVLSorted[3];
+    double timeFiftyMostRepeatedDLLDecimal[3], timeFiftyMostRepeatedDLLSortedDecimal[3], timeFiftyMostRepeatedAVLDecimal[3], timeFiftyMostRepeatedAVLSortedDecimal[3];
+    int contFiftyMostRepeatedAVL[3], contFiftyMostRepeatedAVLSorted[3];
+    unsigned long long contFiftyMostRepeatedDLL[3], contFiftyMostRepeatedDLLSorted[3];
 
     clock_t startTime, endTime;
     double timeDifference, dataGenerationTime, timeDLL[3], timeAVL[3];
@@ -43,11 +70,14 @@ int main(){
     int* data[3] = {data1,data2,data3};
     int* orderedData[3] = {orderedData1,orderedData2,orderedData3};
 
+    QueryPerformanceFrequency(&frequency);
+
     startTime = clock();
-    for(i=0;i<1;i++){
+    for(i=0;i<NUM;i++){
         generateData(n[i], data[i]);
         bubbleSort(data[i],orderedData[i],n[i]);
     }
+
     endTime = clock();
     dataGenerationTime = (double)(endTime - startTime)/CLOCKS_PER_SEC;
 
@@ -62,7 +92,9 @@ int main(){
     AVLNode* rootAVL[3] = {rootAVL1,rootAVL2,rootAVL3};
     AVLNode* rootAVLSorted[3] = {rootAVL1Sorted,rootAVL2Sorted,rootAVL3Sorted};
 
-    for(i=0;i<1;i++){
+    for(i=0;i<NUM;i++){
+
+        aux = n[i];
 
         printf("\n==================================");
         printf("\nConjunto de dados %d",i+1);
@@ -75,34 +107,74 @@ int main(){
         headDLL = createDLLNode(data[i][0]);
         headDLLSorted = createDLLNode(orderedData[i][0]);
 
+
         // INSERE NA DLL
-        startTime = clock();
-        insertDataDLL(headDLL,data[i], n[i]);
-        insertDataDLL(headDLLSorted,orderedData[i], n[i]);
-     
+        QueryPerformanceCounter(&start_time);
+        insertDataDLL(headDLL,data[i], aux, &cont);
+        contInsertDLL[i] = cont;
+        QueryPerformanceCounter(&end_time);
 
-        //IMPRIME DLL
-        //printDLL(headDLL);
 
-        // BUSCA MAIOR NA DLL
-        biggerDLL = searchBiggerDLLNode(headDLL);
-        biggerDLLSorted = searchBiggerDLLNode(headDLLSorted);
+        timeInsertDLL[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeInsertDLLDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeInsertDLL[i];
+
+        QueryPerformanceCounter(&start_time);
+        insertDataDLL(headDLLSorted,orderedData[i], aux, &cont);
+        contInsertDLLSorted[i] = cont;
+        QueryPerformanceCounter(&end_time);
+
+
+        timeInsertDLLSorted[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeInsertDLLSortedDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeInsertDLLSorted[i];
+
+        // BUSCA MAIOR E MENOR NA DLL
+
+        cont = 0;
+        QueryPerformanceCounter(&start_time);
+        biggerDLL = searchBiggerDLLNode(headDLL, &cont);
+        smallerDLL = searchSmallerDLLNode(headDLL, &cont);
+        contBiggerSmallerDLL[i] = cont;
+        cont = 0;
+        QueryPerformanceCounter(&end_time);
+
+        timeBiggerSmallerDLL[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeBiggerSmallerDLLDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeBiggerSmallerDLL[i];
+
+        QueryPerformanceCounter(&start_time);
+        biggerDLLSorted = searchBiggerDLLNode(headDLLSorted, &cont);
+        smallerDLLSorted = searchSmallerDLLNode(headDLLSorted, &cont);
+        contBiggerSmallerDLLSorted[i] = cont;
+        cont = 0;
+        QueryPerformanceCounter(&end_time);
+
+        timeBiggerSmallerDLLSorted[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeBiggerSmallerDLLSortedDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeBiggerSmallerDLLSorted[i];
 
         //IMPRIME MAIOR VALOR
         printf("\nMaior valor: %d",biggerDLL);
         printf("\nMaior valor sorted: %d",biggerDLLSorted);
-
-        // BUSCA MENOR NA DLL
-        smallerDLL = searchSmallerDLLNode(headDLL);
-        smallerDLLSorted = searchSmallerDLLNode(headDLLSorted);
 
         //IMPRIME MENOR VALOR
         printf("\nMenor valor: %d",smallerDLL);
         printf("\nMenor valor sorted: %d",smallerDLLSorted);
 
         // VALOR MÉDIO NA DLL
-        mediumDLL = searchMediumDLLNode(headDLL, n[i]);
-        mediumDLLSorted = searchMediumDLLNode(headDLLSorted, n[i]);
+
+        QueryPerformanceCounter(&start_time);
+        mediumDLL = searchMediumDLLNode(headDLL, aux, &cont);
+        QueryPerformanceCounter(&end_time);
+        contMediumValueDLL[i] = cont;
+        cont = 0;
+        timeMediumValueDLL[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeMediumValueDLLDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeMediumValueDLL[i];
+
+        QueryPerformanceCounter(&start_time);
+        mediumDLLSorted = searchMediumDLLNode(headDLLSorted, aux, &cont);
+        QueryPerformanceCounter(&end_time);
+        contMediumValueDLLSorted[i] = cont;
+        cont = 0;
+        timeMediumValueDLLSorted[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeMediumValueDLLSortedDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeMediumValueDLLSorted[i];
 
         //IMPRIME VALOR MÉDIO
         printf("\nValor médio: %d",mediumDLL);
@@ -110,8 +182,21 @@ int main(){
 
         // 10 MAIS REPETIDOS NA DLL
 
-        searchMostRepeatedDLLNodes(headDLL,tenDLL,tenReps,10);
-        searchMostRepeatedDLLNodes(headDLLSorted,tenDLLSorted,tenRepsSorted,10);
+        QueryPerformanceCounter(&start_time);
+        searchMostRepeatedDLLNodes(headDLL,tenDLL,tenReps,10,&cont);
+        QueryPerformanceCounter(&end_time);
+        contTenMostRepeatedDLL[i] = cont;
+        cont = 0;
+        timeTenMostRepeatedDLL[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeTenMostRepeatedDLLDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeTenMostRepeatedDLL[i];
+
+        QueryPerformanceCounter(&start_time);
+        searchMostRepeatedDLLNodes(headDLLSorted,tenDLLSorted,tenRepsSorted,10,&cont);
+        QueryPerformanceCounter(&end_time);
+        contTenMostRepeatedDLLSorted[i] = cont;
+        cont = 0;
+        timeTenMostRepeatedDLLSorted[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeTenMostRepeatedDLLSortedDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeTenMostRepeatedDLLSorted[i];
         
         printf("\n==================================");
         printf("\n10 mais repetidos");
@@ -126,60 +211,96 @@ int main(){
 
         // 50 MAIS REPETIDOS NA DLL
 
-        searchMostRepeatedDLLNodes(headDLL,fiftyDLL,fiftyReps, 50);
-        searchMostRepeatedDLLNodes(headDLLSorted,fiftyDLLSorted,fiftyRepsSorted, 50);
-        endTime = clock();
-        timeDLL[i] = (double)(endTime - startTime)/CLOCKS_PER_SEC;
+        QueryPerformanceCounter(&start_time);
+        searchMostRepeatedDLLNodes(headDLL,fiftyDLL,fiftyReps, 50,&cont);
+        QueryPerformanceCounter(&end_time);
+        contFiftyMostRepeatedDLL[i] = cont;
+        cont = 0;
+        timeFiftyMostRepeatedDLL[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeFiftyMostRepeatedDLLDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeFiftyMostRepeatedDLL[i];
 
-        /*
-        printf("\n==================================");
-        printf("\n50 mais repetidos");
-        for(int i=0;i<50;i++){
-            printf("\n%d aparece %d vezes", fiftyDLL[i],fiftyReps[i]);
-        }
-        */
+        QueryPerformanceCounter(&start_time);
+        searchMostRepeatedDLLNodes(headDLLSorted,fiftyDLLSorted,fiftyRepsSorted, 50, &cont);
+        QueryPerformanceCounter(&end_time);
+        contFiftyMostRepeatedDLLSorted[i] = cont;
+        cont = 0;
+        timeFiftyMostRepeatedDLLSorted[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeFiftyMostRepeatedDLLSortedDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeFiftyMostRepeatedDLLSorted[i];
 
-        destroyDLL(headDLL);
-        destroyDLL(headDLLSorted);
+        headDLL = destroyDLL(headDLL);
+        headDLLSorted = destroyDLL(headDLLSorted);
 
         printf("\n==================================");
         printf("\nAVL %d",i+1);
         printf("\n==================================");
 
-        //timeDLL = (double)(endTime - startTime)/CLOCKS_PER_SEC;
-        //time_t startTime = clock();
         // CRIA AVL
         rootAVL[i] = NULL;
         rootAVLSorted[i] = NULL;
 
         // INSERE NA AVL
 
-        startTime = clock();
-        rootAVL[i]=insertDataAVL(rootAVL[i],data[i],n[i]);
-        rootAVLSorted[i]=insertDataAVL(rootAVLSorted[i],orderedData[i],n[i]);
-        endTime = clock();
-        timeAVL[i] = (double)(endTime - startTime)/CLOCKS_PER_SEC;
-       
+        QueryPerformanceCounter(&start_time);
+        rootAVL[i]=insertDataAVL(rootAVL[i],data[i], aux, &cont);
+        contInsertAVL[i] = cont;
 
-        // BUSCA MAIOR NA AVL
-        biggerAVL = searchBiggerAVLNode(rootAVL[i]);
-        biggerAVLSorted = searchBiggerAVLNode(rootAVLSorted[i]);
+        QueryPerformanceCounter(&end_time);
+        timeInsertAVL[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeInsertAVLDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeInsertAVL[i];
+
+        QueryPerformanceCounter(&start_time);
+        rootAVLSorted[i]=insertDataAVL(rootAVLSorted[i],orderedData[i], aux, &cont);
+        contInsertAVLSorted[i] = cont;
+
+        QueryPerformanceCounter(&end_time);
+        timeInsertAVLSorted[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeInsertAVLSortedDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeInsertAVLSorted[i];
+        
+        // BUSCA MAIOR E MAIOR NA AVL
+        cont = 0;
+        QueryPerformanceCounter(&start_time);
+        biggerAVL = searchBiggerAVLNode(rootAVL[i], &cont);
+        smallerAVL = searchSmallerAVLNode(rootAVL[i], &cont);
+        QueryPerformanceCounter(&end_time);
+        contBiggerSmallerAVL[i] = cont;
+        cont = 0;
+        timeBiggerSmallerAVL[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeBiggerSmallerAVLDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeBiggerSmallerAVL[i];
+
+        QueryPerformanceCounter(&start_time);
+        biggerAVLSorted = searchBiggerAVLNode(rootAVLSorted[i],&cont);
+        smallerAVLSorted = searchSmallerAVLNode(rootAVLSorted[i],&cont);
+        QueryPerformanceCounter(&end_time);
+        contBiggerSmallerAVLSorted[i] = cont;
+        cont = 0;
+        timeBiggerSmallerAVLSorted[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeBiggerSmallerAVLSortedDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeBiggerSmallerAVLSorted[i];
 
         //IMPRIME MAIOR VALOR
         printf("\nMaior valor: %d",biggerAVL);
         printf("\nMaior valor sorted: %d",biggerAVLSorted);
-
-        // BUSCA MENOR NA AVL        
-        smallerAVL = searchSmallerAVLNode(rootAVL[i]);
-        smallerAVLSorted = searchSmallerAVLNode(rootAVLSorted[i]);
 
         //IMPRIME MENOR VALOR
         printf("\nMenor valor: %d",smallerAVL);
         printf("\nMenor valor sorted: %d",smallerAVLSorted);
 
         // VALOR MÉDIO NA AVL
-        mediumAVL = searchMediumAVLNode(rootAVL[i]);
-        mediumAVLSorted = searchMediumAVLNode(rootAVLSorted[i]);
+
+        QueryPerformanceCounter(&start_time);
+        mediumAVL = searchMediumAVLNode(rootAVL[i], &cont);
+        QueryPerformanceCounter(&end_time);
+        contMediumValueAVL[i] = cont;
+        cont = 0;
+        timeMediumValueAVL[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeMediumValueAVLDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeMediumValueAVL[i];
+
+        QueryPerformanceCounter(&start_time);
+        mediumAVLSorted = searchMediumAVLNode(rootAVLSorted[i],&cont);
+        QueryPerformanceCounter(&end_time);
+        contMediumValueAVLSorted[i] = cont;
+        cont = 0;
+        timeMediumValueAVLSorted[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeMediumValueAVLSortedDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeMediumValueAVLSorted[i];
 
         //IMPRIME VALOR MÉDIO
         printf("\nValor médio: %d",mediumDLL);
@@ -194,8 +315,21 @@ int main(){
             tenRepsSorted[j] = 0;
         }
 
-        searchMostRepeatedAVLNodes(rootAVL[i], tenAVL, tenReps, 10);
-        searchMostRepeatedAVLNodes(rootAVL[i], tenAVLSorted, tenRepsSorted, 10);
+        QueryPerformanceCounter(&start_time);
+        searchMostRepeatedAVLNodes(rootAVL[i], tenAVL, tenReps, 10,&cont);
+        QueryPerformanceCounter(&end_time);
+        contTenMostRepeatedAVL[i] = cont;
+        cont = 0;
+        timeTenMostRepeatedAVL[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeTenMostRepeatedAVLDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeTenMostRepeatedAVL[i];
+
+        QueryPerformanceCounter(&start_time);
+        searchMostRepeatedAVLNodes(rootAVL[i], tenAVLSorted, tenRepsSorted, 10,&cont);
+        QueryPerformanceCounter(&end_time);
+        contTenMostRepeatedAVLSorted[i] = cont;
+        cont = 0;
+        timeTenMostRepeatedAVLSorted[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeTenMostRepeatedAVLSortedDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeTenMostRepeatedAVLSorted[i];
 
         printf("\n==================================");
         printf("\n10 mais repetidos");
@@ -217,67 +351,197 @@ int main(){
             tenRepsSorted[j] = 0;
         }
 
-        searchMostRepeatedAVLNodes(rootAVL[i], fiftyAVL, fiftyReps, 50);
-        searchMostRepeatedAVLNodes(rootAVL[i], tenAVLSorted, tenRepsSorted, 50);
+        QueryPerformanceCounter(&start_time);
+        searchMostRepeatedAVLNodes(rootAVL[i], fiftyAVL, fiftyReps, 50, &cont);
+        QueryPerformanceCounter(&end_time);
+        contFiftyMostRepeatedAVL[i] = cont;
+        cont = 0;
+        timeFiftyMostRepeatedAVL[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeFiftyMostRepeatedAVLDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeFiftyMostRepeatedAVL[i];
 
-        /*
-        printf("\n==================================");
-        printf("\n50 mais repetidos");
-        for(int i=0;i<50;i++){
-            printf("\n%d aparece %d vezes", fiftyAVL[i],fiftyReps[i]);
-        }
-        */
+        QueryPerformanceCounter(&start_time);
+        searchMostRepeatedAVLNodes(rootAVL[i], tenAVLSorted, tenRepsSorted, 50, &cont);
+        QueryPerformanceCounter(&end_time);
+        contFiftyMostRepeatedAVLSorted[i] = cont;
+        cont = 0;
+        timeFiftyMostRepeatedAVLSorted[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000) / frequency.QuadPart;
+        timeFiftyMostRepeatedAVLSortedDecimal[i] = ((end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart) - timeFiftyMostRepeatedAVLSorted[i];
 
-        /*time_t endtime = clock();
-        timeAVL = (double)(endTime - startTime)/CLOCKS_PER_SEC;*/
-
-        // VERIFICAÇÃO DE TEMPO DE EXECUÇÃO PARA CADA ESTRUTURA
-        //timeDifference = abs(timeDLL - timeAVL);
-
-        // VERIFICAR DIFERENÇA DO NÚMERO DE COMPARAÇÕES DE CADA (if/while/for...)
-
-
-        // IMPRIME OS RESULTADOS
-        //formatTime(timeDifference, timeDLL, timeAVL);
-
-        // LIMPA AS STRUCTS
     }
 
     printf("\n==================================");
-    printf("\nTempo de execução:");
+    printf("\nTESTES:");
     printf("\n==================================");
 
     printf("\nData generation");
-    printf("\nElapsed time: %f seconds\n", dataGenerationTime);
+    printf("\nElapsed time: %f seconds", dataGenerationTime);
+    
+    printf("\n==================================");
+    printf("\nInserção:");
+    printf("\n==================================");
 
-    printf("\nDLL1");
-    printf("\nElapsed time: %f seconds\n", timeDLL[0]);
-    printf("\nDLL2");
-    printf("\nElapsed time: %f seconds\n", timeDLL[1]);
-    printf("\nDLL3");
-    printf("\nElapsed time: %f seconds\n", timeDLL[2]);
+    for(int j = 0;j<NUM;j++){
+        printf("\nInsert DLL %d",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeInsertDLL[j],(long long)(timeInsertDLLDecimal[j] * 1000));
+        printf("\nComparisons: %d", contInsertDLL[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nInsert DLL %d (Sorted)",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeInsertDLLSorted[j],(long long)(timeInsertDLLSortedDecimal[j] * 1000));
+        printf("\nComparisons: %d", contInsertDLLSorted[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nInsert AVL %d",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeInsertAVL[j],(long long)(timeInsertAVLDecimal[j] * 1000));
+        printf("\nComparisons: %d", contInsertAVL[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nInsert AVL %d (Sorted)",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeInsertAVLSorted[j],(long long)(timeInsertAVLSortedDecimal[j] * 1000));
+        printf("\nComparisons: %d", contInsertAVLSorted[j]);
+        printf("\n----------------------------------");
+    }
 
-    printf("\nAVL1");
-    printf("\nElapsed time: %f seconds\n", timeAVL[0]);
-    printf("\nAVL2");
-    printf("\nElapsed time: %f seconds\n", timeAVL[1]);
-    printf("\nAVL3");
-    printf("\nElapsed time: %f seconds\n", timeAVL[2]);    
+    printf("\n==================================");
+    printf("\nMaior e menor:");
+    printf("\n==================================");
+
+
+    for(int j = 0;j<NUM;j++){
+        printf("\nBiggerSmaller DLL %d",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeBiggerSmallerDLL[j],(long long)(timeBiggerSmallerDLLDecimal[j] * 1000));
+        printf("\nComparisons: %d", contBiggerSmallerDLL[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nBiggerSmaller DLL %d (Sorted)",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeBiggerSmallerDLLSorted[j],(long long)(timeBiggerSmallerDLLSortedDecimal[j] * 1000));
+        printf("\nComparisons: %d", contBiggerSmallerDLLSorted[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nBiggerSmaller AVL %d",j+1);
+        printf("\nElapsed time: %lld,%lld microsseconds", timeBiggerSmallerAVL[j],timeBiggerSmallerAVLDecimal[j]);
+        printf("\nComparisons: %d", contBiggerSmallerAVL[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nBiggerSmaller AVL %d (Sorted)",j+1);
+        printf("\nElapsed time: %lld,%lld microsseconds", timeBiggerSmallerAVLSorted[j],timeBiggerSmallerAVLSortedDecimal[j]);
+        printf("\nComparisons: %d", contBiggerSmallerAVLSorted[j]);
+        printf("\n----------------------------------");
+    }
+
+    printf("\n==================================");
+    printf("\nValor médio:");
+    printf("\n==================================");
+
+
+    for(int j = 0;j<NUM;j++){
+        printf("\nMediumValue DLL %d",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeMediumValueDLL[j],(long long)(timeMediumValueDLLDecimal[j] * 1000));
+        printf("\nComparisons: %d", contMediumValueDLL[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nMediumValue DLL %d (Sorted)",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeMediumValueDLLSorted[j],(long long)(timeMediumValueDLLSortedDecimal[j] * 1000));
+        printf("\nComparisons: %d", contMediumValueDLLSorted[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nMediumValue AVL %d",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeMediumValueAVL[j],(long long)(timeMediumValueAVLDecimal[j] * 1000));
+        printf("\nComparisons: %d", contMediumValueAVL[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nMediumValue AVL %d (Sorted)",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeMediumValueAVLSorted[j],(long long)(timeMediumValueAVLSortedDecimal[j] * 1000));
+        printf("\nComparisons: %d", contMediumValueAVLSorted[j]);
+        printf("\n----------------------------------");
+    }
+
+    printf("\n==================================");
+    printf("\n10 mais repetidos:");
+    printf("\n==================================");
+
+    for(int j = 0;j<NUM;j++){
+        printf("\nTenMostRepeated DLL %d",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeTenMostRepeatedDLL[j],(long long)(timeTenMostRepeatedDLLDecimal[j] * 1000));
+        printf("\nComparisons: %llu", contTenMostRepeatedDLL[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nTenMostRepeated DLL %d (Sorted)",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeTenMostRepeatedDLLSorted[j],(long long)(timeTenMostRepeatedDLLSortedDecimal[j] * 1000));
+        printf("\nComparisons: %llu", contTenMostRepeatedDLLSorted[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nTenMostRepeated AVL %d",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeTenMostRepeatedAVL[j],(long long)(timeTenMostRepeatedAVLDecimal[j] * 1000));
+        printf("\nComparisons: %d", contTenMostRepeatedAVL[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nTenMostRepeated AVL %d (Sorted)",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeTenMostRepeatedAVLSorted[j],(long long)(timeTenMostRepeatedAVLSortedDecimal[j] * 1000));
+        printf("\nComparisons: %d", contTenMostRepeatedAVLSorted[j]);
+        printf("\n----------------------------------");
+    }
+
+    printf("\n==================================");
+    printf("\n50 mais repetidos:");
+    printf("\n==================================");
+
+    for(int j = 0;j<NUM;j++){
+        printf("\nFiftyMostRepeated DLL %d",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeFiftyMostRepeatedDLL[j],(long long)(timeFiftyMostRepeatedDLLDecimal[j] * 1000));
+        printf("\nComparisons: %llu", contFiftyMostRepeatedDLL[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nFiftyMostRepeated DLL %d (Sorted)",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeFiftyMostRepeatedDLLSorted[j],(long long)(timeFiftyMostRepeatedDLLSortedDecimal[j] * 1000));
+        printf("\nComparisons: %llu", contFiftyMostRepeatedDLLSorted[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nFiftyMostRepeated AVL %d",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeFiftyMostRepeatedAVL[j],(long long)(timeFiftyMostRepeatedAVLDecimal[j] * 1000));
+        printf("\nComparisons: %d", contFiftyMostRepeatedAVL[j]);
+        printf("\n----------------------------------");
+    }
+    for(int j = 0;j<NUM;j++){
+        printf("\nFiftyMostRepeated AVL %d (Sorted)",j+1);
+        printf("\nElapsed time: %lld,%03lld millisseconds", timeFiftyMostRepeatedAVLSorted[j],(long long)(timeFiftyMostRepeatedAVLSortedDecimal[j] * 1000));
+        printf("\nComparisons: %d", contFiftyMostRepeatedAVLSorted[j]);
+        printf("\n----------------------------------");
+    }
+
 
     return 0;
 }
 
-void insertDataDLL(DLLNode *head, int *data, int n){
+void insertDataDLL(DLLNode *head, int *data, int n, int *cont){
+    *cont = 0;
     for(int i = 1; i < n; i++){
-        insertDLLNode(head, data[i]);
+        insertDLLNode(head, data[i], cont);
     }
 }
 
-AVLNode* insertDataAVL(AVLNode *root, int *data, int n){
+AVLNode* insertDataAVL(AVLNode *root, int *data, int n, int *cont){
     int ok;
+    *cont = 0;
+    
     for(int i = 1; i < n; i++){
-        root = insertAVLNode(root, data[i],&ok);
+        root = insertAVLNode(root, data[i], &ok, cont);
     }
+
     return root;
 }
 
@@ -292,7 +556,6 @@ void generateData (int num, int *vetor){
         int num2 = 25000;
         //GERA 90% DOS DADOS DE FORMA PSEUDOALEATÓRIA
         for(int i = 0; i < (0.9 * num); i ++){
-            //NÃO SEI DIREITO COMO ISSO FUNCIONOU, MAS GERA UM NÚMERO ENTRE 1 E 100000.
             vetor[i] = 4*((rand() % num2-2)+3)-((rand() % 4)+1)+1;
         }
 
@@ -331,29 +594,6 @@ void generateData (int num, int *vetor){
             vetor[i] = aux;
         }
     }
-}
-
-void formatTime(long int difference, long int timeDLL, long int timeAVL){
-    int flag = 0;
-
-    if(timeDLL > timeAVL)
-        flag = 1;
-
-    if(difference >= 60)
-        if(flag == 1)
-            printf("A DLL demorou %ld minutos a mais que a AVL.\n", difference / 60);
-        else
-            printf("A AVL demorou %ld minutos a mais que a DLL.\n", difference / 60);
-    else if(difference >= 3600)
-        if(flag == 1)
-            printf("A DLL demorou %ld horas a mais que a AVL.\n", difference / 3600);
-        else
-            printf("A AVL demorou %ld horas a mais que a DLL.\n", difference / 3600);
-    else
-        if(flag == 1)
-            printf("A DLL demorou %ld segundos a mais que a AVL.\n", difference);
-        else
-            printf("A AVL demorou %ld segundos a mais que a DLL.\n", difference);
 }
 
 //CHAT GPT

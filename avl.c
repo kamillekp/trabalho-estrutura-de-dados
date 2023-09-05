@@ -3,11 +3,11 @@
 #include "avl.h"
 
 //CODIGOS DO MOODLE
-AVLNode* insertAVLNode(AVLNode* node, int key, int *ok){
-    
+AVLNode* insertAVLNode(AVLNode* node, int key, int *ok, int *cont){
+   
+*cont += 1;
 if (node == NULL) 
      {
-      //printf("AAAAAAAAAAA");
      	node = (AVLNode*) malloc(sizeof(AVLNode));
         node->key = key;
         node->leftKid = NULL;
@@ -15,29 +15,31 @@ if (node == NULL)
         node->factor = 0; 
 	    *ok = 1;
      }
-     else if (key < node->key) 
+     else if (key <= node->key) 
      {
-      //printf("BBBBBBBBBB");
-		node->leftKid = insertAVLNode(node->leftKid,key,ok);
+		node->leftKid = insertAVLNode(node->leftKid,key,ok,cont);
+      //CONTA IF E SWITCH
+      *cont+=2;
         if (*ok) 
         {
    		   switch (node->factor) {
                case -1:  node->factor = 0; *ok = 0; break;
                case  0:  node->factor = 1;  break;
-               case  1:  node=firstCase(node,ok); break;
+               case  1:  node=firstCase(node,ok,cont); break;
             }
          }
      }
 	  else
      {
-      //printf("CCCCCCCCCCC");
-  		   node->rightKid = insertAVLNode(node->rightKid,key,ok);
+  		   node->rightKid = insertAVLNode(node->rightKid,key,ok,cont);
+         //CONTA IF E SWITCH
+         *cont+=2;
             if (*ok)
             { 
                switch (node->factor) {
                   case  1:  node->factor = 0; *ok = 0; break;
                   case  0:  node->factor = -1; break;
-                  case -1:  node = secondCase(node,ok); break;
+                  case -1:  node = secondCase(node,ok,cont); break;
                }
             }
      }
@@ -66,7 +68,7 @@ AVLNode* leftRotation(AVLNode *pt){
    return pt;
 } 
 
-AVLNode* doubleRightRotation (AVLNode* pt){
+AVLNode* doubleRightRotation (AVLNode* pt,int *cont){
    AVLNode* ptu, *ptv;
 
    ptu = pt->leftKid; 
@@ -75,6 +77,7 @@ AVLNode* doubleRightRotation (AVLNode* pt){
    ptv->leftKid = ptu; 
    pt->leftKid = ptv->rightKid; 
    ptv->rightKid = pt; 
+   *cont+=2;
    if (ptv->factor == 1)   pt->factor = -1;
       else pt->factor = 0;
    if (ptv->factor == -1)  ptu->factor = 1;
@@ -83,7 +86,7 @@ AVLNode* doubleRightRotation (AVLNode* pt){
    return pt;
 } 
 
-AVLNode* doubleLeftRotation (AVLNode* pt){
+AVLNode* doubleLeftRotation (AVLNode* pt,int *cont){
    AVLNode *ptu, *ptv;
 
    ptu = pt->rightKid; 
@@ -92,6 +95,7 @@ AVLNode* doubleLeftRotation (AVLNode* pt){
    ptv->rightKid = ptu; 
    pt->rightKid = ptv->leftKid; 
    ptv->leftKid = pt; 
+   *cont+=2;
    if (ptv->factor == -1) pt->factor = 1;
      else pt->factor = 0;
    if (ptv->factor == 1) ptu->factor = -1;
@@ -100,18 +104,20 @@ AVLNode* doubleLeftRotation (AVLNode* pt){
    return pt;
 }
 
-AVLNode* firstCase (AVLNode* node , int *ok)
+AVLNode* firstCase (AVLNode* node , int *ok,int *cont)
 {
    AVLNode *ptu; 
 
 	ptu = node->leftKid;
+   *cont+=1;
 	if (ptu->factor == 1) 
     {    
+        
         node = rightRotation(node);
      }
     else
     {
-        node = doubleRightRotation(node);
+        node = doubleRightRotation(node, cont);
     }
 	
     node->factor = 0;
@@ -119,9 +125,11 @@ AVLNode* firstCase (AVLNode* node , int *ok)
 	return node;
 }
 
-AVLNode* secondCase (AVLNode *node , int *ok)
+AVLNode* secondCase (AVLNode *node , int *ok,int *cont)
 {
     AVLNode *ptu; 
+
+    *cont+=1;
 
 	ptu = node->rightKid;
 	if (ptu->factor == -1) 
@@ -130,7 +138,7 @@ AVLNode* secondCase (AVLNode *node , int *ok)
     }
     else
     {
-       node=doubleLeftRotation(node);
+       node=doubleLeftRotation(node,cont);
     }
 	node->factor = 0;
 	*ok = 0;
@@ -185,25 +193,27 @@ void printAVL(AVLNode *root, int space)
     printAVL(root->leftKid, space); 
 }
 
-int searchSmallerAVLNode(AVLNode *root){
+int searchSmallerAVLNode(AVLNode *root, int *cont){
 
-    AVLNode *aux = root;
+   AVLNode *aux = root;
 
-    while(aux->leftKid != NULL){
-        aux = aux->leftKid;
-    }
+   while(aux->leftKid != NULL){
+      *cont+=1;
+      aux = aux->leftKid;
+   }
 
-    return aux->key;
+   return aux->key;
 };
 
-int searchBiggerAVLNode(AVLNode *root){
-       AVLNode *aux = root;
+int searchBiggerAVLNode(AVLNode *root, int *cont){
+   AVLNode *aux = root;
 
-    while(aux->rightKid != NULL){
-        aux = aux->rightKid;
-    }
+   while(aux->rightKid != NULL){
+      *cont+=1;
+      aux = aux->rightKid;
+   }
 
-    return aux->key;
+   return aux->key;
 };
 
 int factor(AVLNode *node)
@@ -226,37 +236,29 @@ void draw(AVLNode *node , int level)
 }
 
 
-void searchMostRepeatedAVLNodes(AVLNode* root, int *mostRepeated, int *repetitions, int n) {
+void searchMostRepeatedAVLNodes(AVLNode* root, int *mostRepeated, int *repetitions, int n, int *contC) {
 
    int cont,i,j;
    int test = 0;
 
+   *contC+=1;
     if (root != NULL) {
       test = 0;
       cont = 0;
 
-      //VERIFICA SE O TERMO JÁ ESTÁ ENTRE OS 10 MAIS REPETIDOS
-      /*
-      for(i=0;i<n;i++){
-         if(root->key == mostRepeated[i]){
-             test = 1;
-         }
-      }
-      */
 
-      //printf("%d",root->key);
-
-      //SE NÃO ESTIVER, BUSCA A QUANTIDADE DE DUPLICADAS
-      //if(!test){
-         findDuplicates(root, mostRepeated, repetitions, n, root->key, &cont);
-      //}  
+      //BUSCA A QUANTIDADE DE DUPLICADAS
+      findDuplicates(root, mostRepeated, repetitions, n, root->key, &cont, contC);
       
       //SE ESTIVER ENTRE AS 10 MAIS REPETIDAS ENCONTRA A POSIÇÃO ONDE SE ENCONTRA
+      *contC+=1;
       if(cont>repetitions[n-1]){
 
          //CASO SEJA O QUE MAIS SE REPETE INCLUI NA PRIMEIRA POSICAO
+         *contC+=1;
          if(cont>=repetitions[0]){
                for(j=n-1;j>=0;j--){
+                  *contC+=1;
                   mostRepeated[j+1] = mostRepeated[j];
                     repetitions[j+1] = repetitions[j];
                }
@@ -267,10 +269,13 @@ void searchMostRepeatedAVLNodes(AVLNode* root, int *mostRepeated, int *repetitio
          else{
                 
             for(i=n-2;i>=0;i--){
+               //CONTA FOR E IF JUNTO
+               *contC+=2;
                     
                //POSICIONA O NÚMERO IMEDIATAMENTE ANTES DE UM NÚMERO COM MAIS REPETICOES QUE ELE
                if(repetitions[i]>cont){
                   for(j=n-2;j>i;j--){
+                     *contC+=1;
                      //DESLOCA OS NUMEROS COM MENOS REPETICOES UMA CASA PARA TRAS NO RANKING
                         mostRepeated[j+1] = mostRepeated[j];
                         repetitions[j+1] = repetitions[j];
@@ -284,55 +289,59 @@ void searchMostRepeatedAVLNodes(AVLNode* root, int *mostRepeated, int *repetitio
             }
         }
 
-      // Traverse the left subtree
-      searchMostRepeatedAVLNodes(root->leftKid, mostRepeated, repetitions, n);          
+      searchMostRepeatedAVLNodes(root->leftKid, mostRepeated, repetitions, n, contC);          
 
-      // Traverse the right subtree
-      searchMostRepeatedAVLNodes(root->rightKid, mostRepeated, repetitions, n);
+      searchMostRepeatedAVLNodes(root->rightKid, mostRepeated, repetitions, n, contC);
 
     }
 }
 
-void findDuplicates(AVLNode* root, int *mostRepeated, int* repetitions, int n, int key, int *cont){
+void findDuplicates(AVLNode* root, int *mostRepeated, int* repetitions, int n, int key, int *cont, int *contC){
    
+   *contC+=1;
    if(root!=NULL){
+      *contC+=1;
       if(root->key == key){
          *cont = *cont+1;
       }
 
-      findDuplicates(root->leftKid, mostRepeated, repetitions, n, key, cont);
-      findDuplicates(root->rightKid, mostRepeated, repetitions, n, key, cont);
+      findDuplicates(root->leftKid, mostRepeated, repetitions, n, key, cont, contC);
+      findDuplicates(root->rightKid, mostRepeated, repetitions, n, key, cont, contC);
 
    }
 }
 
-int searchMediumAVLNode(AVLNode* root){
+int searchMediumAVLNode(AVLNode* root, int *cont){
 
    int bigger = 0;
    int smaller = 0;
    int equal = 0;
 
-    if (root != NULL) {
+   *cont+=1;
+   if (root != NULL) {
       bigger = 0;
       smaller = 0;
       equal = 0;
      
-      testMediumNode(root, root->key, &bigger,&smaller,&equal);
-
+      testMediumNode(root, root->key, &bigger,&smaller,&equal,cont);
+      
+      *cont+=1;
       if(abs(bigger-smaller)<equal+1){
          return root->key;
       }
 
-      searchMediumAVLNode(root->leftKid);          
+      searchMediumAVLNode(root->leftKid, cont);          
 
-      searchMediumAVLNode(root->rightKid);
+      searchMediumAVLNode(root->rightKid, cont);
 
    }
    return 0;
 }
 
-void testMediumNode(AVLNode* node, int key, int* bigger, int* smaller, int* equal){
+void testMediumNode(AVLNode* node, int key, int* bigger, int* smaller, int* equal, int *cont){
 
+   //CONTA OS DOIS IFS
+   *cont+=2;
    if(node!=NULL){
       if(node->key>key){
          bigger++;
@@ -344,8 +353,8 @@ void testMediumNode(AVLNode* node, int key, int* bigger, int* smaller, int* equa
          equal++;
       }
 
-      testMediumNode(node->leftKid, key, bigger, smaller, equal);
-      testMediumNode(node->rightKid, key, bigger, smaller, equal);
+      testMediumNode(node->leftKid, key, bigger, smaller, equal, cont);
+      testMediumNode(node->rightKid, key, bigger, smaller, equal, cont);
 
    }
 

@@ -12,12 +12,13 @@ DLLNode* createDLLNode(int k){
     return newNode;
 }
 
-DLLNode* insertDLLNode(DLLNode* head, int k) {
+DLLNode* insertDLLNode(DLLNode* head, int k, int *cont) {
     DLLNode *newNode = createDLLNode(k);
 
     DLLNode *aux = head;
 
     while(aux->right != NULL){
+        *cont+=1;
         aux = aux->right;
     }
 
@@ -40,11 +41,13 @@ DLLNode *destroyDLL(DLLNode *head){
     return NULL; // Return NULL to indicate that the list is empty after destruction
 };
 
-int searchSmallerDLLNode(DLLNode *head){
+int searchSmallerDLLNode(DLLNode *head, int *cont){
     DLLNode *aux = head;
     DLLNode *smaller = head;
 
     while(aux != NULL){
+        //CONTA O WHILE E O IF JUNTO
+        *cont+=2;
         if(aux->key < smaller->key){
             smaller = aux;
         }
@@ -55,11 +58,13 @@ int searchSmallerDLLNode(DLLNode *head){
     return smaller->key;
 }
 
-int searchBiggerDLLNode(DLLNode *head){
+int searchBiggerDLLNode(DLLNode *head, int *cont){
     DLLNode *aux = head;
     DLLNode *bigger = head;
 
     while(aux != NULL){
+        //CONTA O WHILE E O IF JUNTO
+        *cont+=2;
         if(aux->key > bigger->key){
             bigger = aux;
         }
@@ -70,28 +75,19 @@ int searchBiggerDLLNode(DLLNode *head){
     return bigger->key;
 }
 
-int mediaDLLNode(DLLNode *head, int tam){
-    DLLNode *aux = head;
-    int soma = 0;
-
-    while(aux != NULL){
-        soma += aux->key;
-        aux = aux->right;
-    }
-
-    return soma/tam;
-}
-
-int searchMediumDLLNode(DLLNode *head, int tam){
+int searchMediumDLLNode(DLLNode *head, int tam, int *cont){
     DLLNode *aux1 = head;
     DLLNode *aux2 = head;
     int bigger, smaller, equal;
 
     while(aux1 != NULL){
+        *cont+=1;
         bigger = 0;
         smaller = 0;
         equal = 0;
         while (aux2 != NULL){
+            //CONTA O WHILE E O IF JUNTO
+            *cont+=2;
             if(aux2->key>aux1->key){
                 bigger++;
             }
@@ -106,6 +102,7 @@ int searchMediumDLLNode(DLLNode *head, int tam){
 
         //SE O NÚMERO TIVER EXATAMENTE NO MEIO DO CONJUNTO DE DADOS RETORNA O VALOR DELE 
         //(HÁ DUAS POSSIBILIDADES PARA CONJUNTO COM QUANTIDADE PAR DE DADOS)
+        *cont+=1;
         if(abs(bigger-smaller)<equal+1){
             return aux1->key;
         }
@@ -125,11 +122,12 @@ void printDLL(DLLNode *head){
     printf("\n");
 }
 
-void searchMostRepeatedDLLNodes(DLLNode *head, int *mostRepeated, int *repetitions, int n){
+void searchMostRepeatedDLLNodes(DLLNode *head, int *mostRepeated, int *repetitions, int n, int *contC){
     DLLNode *aux1 = head;
     DLLNode *aux2;
     int i,j,cont;
     
+    *contC+=1;
     for(i=0;i<n;i++){
         mostRepeated[i] = 0;
         repetitions[i] = 0;
@@ -137,13 +135,16 @@ void searchMostRepeatedDLLNodes(DLLNode *head, int *mostRepeated, int *repetitio
 
     //PERCORRE TODOS OS TERMOS DA DLL
     while(aux1 != NULL){
-
+        *contC+=1;
 
         //VERIFICA SE O TERMO JÁ ESTÁ ENTRE OS 10 MAIS REPETIDOS
         for(i=0;i<n;i++){
+            //CONTA O FOR E O IF JUNTO
+            *contC+=2;
             if(aux1->key == mostRepeated[i]){
                 i=-1;
                 //CASO JÁ ESTEJA, PASSA PRO PRÓXIMO E CHECA NOVAMENTE
+                *contC+=1;
                 if(aux1!=NULL){  
                     aux1 = aux1->right;
                 }
@@ -154,6 +155,8 @@ void searchMostRepeatedDLLNodes(DLLNode *head, int *mostRepeated, int *repetitio
         cont = 0;
         aux2 = head;
         while(aux2 != NULL){
+            //CONTA O WHILE E O IF JUNTO
+            *contC+=2;
             if(aux2->key==aux1->key){
                 cont++;
             }
@@ -161,11 +164,14 @@ void searchMostRepeatedDLLNodes(DLLNode *head, int *mostRepeated, int *repetitio
         }
 
         //SE ESTIVER ENTRE AS 10 MAIS REPETIDAS ENCONTRA A POSIÇÃO ONDE SE ENCONTRA
+        *contC+=1;
         if(cont>repetitions[n-1]){
 
+            *contC+=1;
             //CASO SEJA O QUE MAIS SE REPETE INCLUI NA PRIMEIRA POSICAO
             if(cont>=repetitions[0]){
                 for(j=n-1;j>=0;j--){
+                    *contC+=1;
                     mostRepeated[j+1] = mostRepeated[j];
                     repetitions[j+1] = repetitions[j];
                 }
@@ -176,10 +182,14 @@ void searchMostRepeatedDLLNodes(DLLNode *head, int *mostRepeated, int *repetitio
             else{
                 
                 for(i=n-2;i>=0;i--){
+
+                    //CONTA O FOR E O IF JUNTO
+                    *contC+=2;
                     
                     //POSICIONA O NÚMERO IMEDIATAMENTE ANTES DE UM NÚMERO COM MAIS REPETICOES QUE ELE
                     if(repetitions[i]>cont){
                         for(j=n-2;j>i;j--){
+                            *contC+=1;
                             //DESLOCA OS NUMEROS COM MENOS REPETICOES UMA CASA PARA TRAS NO RANKING
                             mostRepeated[j+1] = mostRepeated[j];
                             repetitions[j+1] = repetitions[j];
@@ -194,7 +204,7 @@ void searchMostRepeatedDLLNodes(DLLNode *head, int *mostRepeated, int *repetitio
             }
         }
 
-
+        *contC+=1;
         if(aux1!=NULL){    
             aux1 = aux1->right;
         }
